@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function Header(props) {
     return (
         <Container>
-            <h1>Water My Plants.</h1>
+            <h1>PlantWise</h1>
 
             {/* navigation menu / user control panel with some conditional rendering. will need to change with backend auth probably */}
             <nav className="user-cp">

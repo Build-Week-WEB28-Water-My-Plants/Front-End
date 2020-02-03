@@ -11,13 +11,17 @@ function Register(props) {
 
     // needs to be wired up to backend endpoint for registering users
 
+    // state for new user to be created
     const [newUser, setNewUser] = useState({
         username: '',
         password: '',
         phone: ''
     });
 
+    // input change handler
     const handleChange = (e) => {
+
+        // update new user state
         setNewUser({
             ...newUser,
             [e.target.name]: e.target.value
@@ -26,10 +30,14 @@ function Register(props) {
 
     return (
         <Container>
+
             <div className="svg-banner">
                 <img src={Watering} alt="Woman watering plants" />
             </div>
+
             <h3>Create a New Account</h3>
+
+            {/* Register Form */}
             <form>
                 <input
                     type="text"
@@ -60,6 +68,7 @@ function Register(props) {
                     <span onClick={() => history.push(`/login`)}>Already have an account? Login</span>
                 </div>
             </form>
+
         </Container>
     )
 }
@@ -81,6 +90,7 @@ const Container = styled.div`
         }
     }
 
+    /* SVG of woman watering plants */
     img {
         margin-bottom: 10%;
         height: 50rem;
@@ -91,6 +101,7 @@ const Container = styled.div`
         }
     }
 
+    /* Registration form styling */
     form {
         padding: 2.5rem 0;
         display: flex;
@@ -98,6 +109,7 @@ const Container = styled.div`
         align-items: center;
         width: 100%;
 
+        /* Input styling */
         input {
             margin: 0.5rem 0;
             width: 20rem;
@@ -116,6 +128,7 @@ const Container = styled.div`
             }
         }
         
+        /* Button Styling */
         button {
             width: 20rem;
             height: 3.5rem;
@@ -134,6 +147,7 @@ const Container = styled.div`
             }
         }
 
+        /* Login if already registered */
         .extra-options {
             margin: 1rem 0;
             width: 80%;

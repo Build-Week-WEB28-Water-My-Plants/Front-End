@@ -20,14 +20,12 @@ function App() {
   // state for plants from server (shouldn't need once we have endpoints for users because plant state should then be in the user for their list of created and saved plants)
   const [plants, setPlants] = useState([]);
 
-  // use state
+  // user state
   const [user, setUser] = useState({
+    id: '',
     username: '',
     password: '',
-    phone: '',
-    id: '',
-    token: '',
-    plants: []
+    phone_number: ''
   });
 
   // loading state for loading messages - needs work
