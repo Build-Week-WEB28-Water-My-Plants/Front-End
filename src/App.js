@@ -12,6 +12,7 @@ import Register from './components/Register';
 import Plants from './components/Plants';
 import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
+import CreateSpecies from './components/CreateSpecies';
 import Home from './components/Home';
 import Header from './components/visual/Header';
 
@@ -51,6 +52,7 @@ function App() {
             <PrivateRoute exact path="/plants" component={Plants} />
             <PrivateRoute path="/plants/:id" component={Edit} />
             <PrivateRoute path="/create" component={CreatePlant} />
+            <PrivateRoute path="/create-species" component={CreateSpecies} />
           </div>
         </UserContext.Provider>
       </PlantsContext.Provider>

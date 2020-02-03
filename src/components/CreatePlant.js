@@ -14,13 +14,15 @@ function CreatePlant(props) {
     let history = useHistory();
     const { setPlants } = useContext(PlantsContext);
 
+    const id = localStorage.getItem('id');
+
     // new plant state
     const [newPlant, setNewPlant] = useState({
+        id: '',
         nickname: '',
-        species: '',
-        h2oFrequency: '',
-        image: '',
-        created: Date.now()
+        species_id: '',
+        location: '',
+        user_id: id
     });
 
     const handleChange = (e) => {
@@ -34,8 +36,9 @@ function CreatePlant(props) {
         axiosWithAuth().post(`/api/plants`, newPlant)
             .then((res) => {
                 console.log(res);
-                setPlants(res.data);
-                history.push(`/plants`);
+                // need to work on species first
+                // setPlants(res.data);
+                // history.push(`/plants`);
             })
             .catch((err) => {
                 console.log(err);
