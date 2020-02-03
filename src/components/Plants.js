@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 // contexts
 import { PlantsContext } from '../contexts';
+import { UserContext } from '../contexts';
 
 // components
 import Plant from './Plant';
@@ -11,17 +12,23 @@ import Plant from './Plant';
 function Plants(props) {
 
     const { plants, setPlants } = useContext(PlantsContext);
+    const { user, setUser } = useContext(UserContext);
 
-    useEffect(() => {
-        axiosWithAuth().get(`/api/plants/user/:id`)
-            .then((res) => {
-                console.log(res);
-                // setPlants(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }, [setPlants]);
+    // we need to refactor now to send an authenticated GET request to pull
+    // a user's plants. we just need to figure out how to know what user id to use
+    // for the request
+
+    // useEffect(() => {
+    //     console.log(user);
+    //     axiosWithAuth().get(`/api/plants/user/:id`)
+    //         .then((res) => {
+    //             console.log(res);
+    //             // setPlants(res.data);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         })
+    // }, [setPlants]);
 
     return (
         <Container>

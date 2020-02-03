@@ -30,9 +30,10 @@ function Register(props) {
     }
 
     const register = (newUser) => {
-        axios.post(`https://water-my-plants-1.herokuapp.com/api/users`, newUser)
+        axios.post(`https://water-my-plants-1.herokuapp.com/api/users/register`, newUser)
             .then((res) => {
                 console.log(res);
+                history.push(`/login`);
             })
             .catch((err) => {
                 console.log(err);

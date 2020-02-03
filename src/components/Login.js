@@ -54,12 +54,12 @@ function Login(props) {
     // login function for form submit
     const log = (user) => {
         setIsLoading(true);
-        axios.post(`https://water-my-plants-1.herokuapp.com/api/users`, user)
+        axios.post(`https://water-my-plants-1.herokuapp.com/api/users/login`, user)
             .then((res) => {
                 console.log(res);
-                // localStorage.setItem('token', res.data.payload);
-                // setIsLoading(false);
-                // history.push(`/plants`);
+                localStorage.setItem('token', res.data.token);
+                setIsLoading(false);
+                history.push(`/plants`);
             })
             .catch((err) => {
                 console.log(err.response.data.error);
