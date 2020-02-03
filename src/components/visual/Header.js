@@ -98,15 +98,7 @@ const Container = styled.header`
         margin-left: 15%;
         width: 25%;
 
-        @media (max-width: 815px) {
-            font-size: 1.4rem;
-        }
-
-        @media (max-width: 735px) {
-            font-size: 1.2rem;
-        }
-
-        @media (max-width: 660px) {
+        @media (max-width: 480px) {
             display: none;
         }
     }
