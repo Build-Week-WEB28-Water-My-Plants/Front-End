@@ -27,7 +27,7 @@ function Register(props) {
 
     let cb = () =>
     {
-        axios.post("https://water-my-plants-1.herokuapp.com/api/users",
+        axios.post("https://water-my-plants-1.herokuapp.com/api/users/register",
                 {
                     "username":newUser.username,
                     "password":newUser.password,
@@ -35,8 +35,12 @@ function Register(props) {
                 })
             .then((response)=>
                 {
-                    console.log(response);
+                    //response.data["id"]
+                    //response.data["username"]
 
+                    history.push(`/login`);
+
+                    //Get out of memory
                     setNewUser.password = "";
                 })
             .catch((error)=>{console.log(error)});
