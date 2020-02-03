@@ -1,4 +1,5 @@
 # Water My Plants
+Product Vision: (https://docs.google.com/document/d/1By7cS41zD6Tl9LcNFRik487RcO0EOxL0Y87YwvQM8Yk/edit)
 
 ## Libraries and tools used:
 
