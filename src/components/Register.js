@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 // assets
 import Watering from '../assets/Watering.svg';
@@ -24,13 +25,30 @@ function Register(props) {
         });
     }
 
+    let cb = () =>
+    {
+        axios.post("https://water-my-plants-1.herokuapp.com/api/users",
+                {
+                    "username":newUser.username,
+                    "password":newUser.password,
+                    "phone_number":newUser.phone
+                })
+            .then((response)=>
+                {
+                    console.log(response);
+
+                    setNewUser.password = "";
+                })
+            .catch((error)=>{console.log(error)});
+    }
+
     return (
         <Container>
             <div className="svg-banner">
                 <img src={Watering} alt="Woman watering plants" />
             </div>
             <h3>Create a New Account</h3>
-            <form>
+            <div>
                 <input
                     type="text"
                     name="username"
@@ -55,11 +73,11 @@ function Register(props) {
                     onChange={handleChange}
                     autoComplete="off"
                 />
-                <button type="submit">Register</button>
+                <button type="submit" onClick={()=>cb()} >Register</button>
                 <div className="extra-options">
                     <span onClick={() => history.push(`/login`)}>Already have an account? Login</span>
                 </div>
-            </form>
+            </div>
         </Container>
     )
 }
@@ -91,7 +109,7 @@ const Container = styled.div`
         }
     }
 
-    form {
+    div {
         padding: 2.5rem 0;
         display: flex;
         flex-direction: column;
