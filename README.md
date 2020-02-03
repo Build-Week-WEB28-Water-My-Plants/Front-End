@@ -1,5 +1,4 @@
 # Water My Plants
-## Front-End
 
 ## Libraries and tools used:
 
