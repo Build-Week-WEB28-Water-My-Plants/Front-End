@@ -22,7 +22,6 @@ function App() {
 
   // user state
   const [user, setUser] = useState({
-    id: '',
     username: '',
     password: '',
     phone_number: ''
