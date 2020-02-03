@@ -13,10 +13,10 @@ function Plants(props) {
     const { plants, setPlants } = useContext(PlantsContext);
 
     useEffect(() => {
-        axiosWithAuth().get(`/api/plants`)
+        axiosWithAuth().get(`/api/plants/user/:id`)
             .then((res) => {
-                // console.log(res);
-                setPlants(res.data);
+                console.log(res);
+                // setPlants(res.data);
             })
             .catch((err) => {
                 console.log(err);
