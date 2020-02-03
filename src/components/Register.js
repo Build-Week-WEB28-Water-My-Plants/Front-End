@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 // assets
 import Watering from '../assets/Watering.svg';
@@ -15,7 +16,7 @@ function Register(props) {
     const [newUser, setNewUser] = useState({
         username: '',
         password: '',
-        phone: ''
+        phone_number: ''
     });
 
     // input change handler
@@ -28,6 +29,16 @@ function Register(props) {
         });
     }
 
+    const register = (newUser) => {
+        axios.post(`https://water-my-plants-1.herokuapp.com/api/users`, newUser)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }
+
     return (
         <Container>
 
@@ -38,7 +49,10 @@ function Register(props) {
             <h3>Create a New Account</h3>
 
             {/* Register Form */}
-            <form>
+            <form onSubmit={(e) => {
+                e.preventDefault();
+                register(newUser);
+            }}>
                 <input
                     type="text"
                     name="username"
@@ -56,10 +70,10 @@ function Register(props) {
                     autoComplete="off"
                 />
                 <input
-                    type="text"
-                    name="phone"
+                    type="tel"
+                    name="phone_number"
                     placeholder="Phone #"
-                    value={newUser.phone}
+                    value={newUser.phone_number}
                     onChange={handleChange}
                     autoComplete="off"
                 />
