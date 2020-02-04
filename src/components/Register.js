@@ -27,7 +27,7 @@ function Register(props) {
 
         setNewUser({
             ...newUser,
-            [e.target.name]: e.target.value.replace(/[^A-Za-z0-9\s!?]/g, "").replace(/ /g, "")
+            [e.target.name]: e.target.name == "phone" ? e.target.value.replace(/((?!([0-9()-])).)/g, "") : e.target.value.replace(/[^A-Za-z0-9\s!?]/g, "").replace(/ /g, "")
         });
     }
 
@@ -88,7 +88,7 @@ function Register(props) {
                 <input
                     type="text"
                     name="phone"
-                    placeholder="Phone #"
+                    placeholder="(###)###-####"
                     value={newUser.phone}
                     onChange={handleChange}
                     autoComplete="off"
