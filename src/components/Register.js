@@ -18,15 +18,29 @@ function Register(props) {
         phone: ''
     });
 
+    let [errorText, sErrorText] = useState("");
+
     const handleChange = (e) => {
+
+        if (e.target.value.length > 28)
+            return;
+
         setNewUser({
             ...newUser,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value.replace(/[^A-Za-z0-9\s!?]/g, "").replace(/ /g, "")
         });
     }
 
     let cb = () =>
     {
+        if (newUser.username == "" ||
+            newUser.password == "" ||
+            newUser.phone == "")
+            {
+                sErrorText("Please fill out all fields!");
+                return;
+            }
+
         axios.post("https://water-my-plants-1.herokuapp.com/api/users/register",
                 {
                     "username":newUser.username,
@@ -40,10 +54,12 @@ function Register(props) {
 
                     history.push(`/login`);
 
-                    //Get out of memory
-                    setNewUser.password = "";
+                    // ((Should probably reset the newuser so the password gets deallocated from mem))
                 })
-            .catch((error)=>{console.log(error)});
+            .catch((error)=>
+                {
+                    sErrorText("Looks like that username/phone number is already registered!");
+                });
     }
 
     return (
@@ -78,6 +94,7 @@ function Register(props) {
                     autoComplete="off"
                 />
                 <button type="submit" onClick={()=>cb()} >Register</button>
+                <h4>{errorText != "" ? errorText : null}</h4>
                 <div className="extra-options">
                     <span onClick={() => history.push(`/login`)}>Already have an account? Login</span>
                 </div>
@@ -119,6 +136,12 @@ const Container = styled.div`
         flex-direction: column;
         align-items: center;
         width: 100%;
+
+        h4
+        {
+            font-size: 14px;
+            color: #872a26;
+        }
 
         input {
             margin: 0.5rem 0;
