@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
@@ -12,14 +12,26 @@ import Start from '../assets/Start.svg';
 function CreatePlant(props) {
 
     let history = useHistory();
-    const { setPlants } = useContext(PlantsContext);
+    const { species, setSpecies } = useContext(PlantsContext);
+
+    // grab list of species to iterate over for options when creating a new plant
+    useEffect(() => {
+        axiosWithAuth().get(`/plants/species`)
+            .then((res) => {
+                // console.log(res);
+                setSpecies(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, [setSpecies]);
 
     const id = localStorage.getItem('id');
 
     // new plant state
     const [newPlant, setNewPlant] = useState({
         nickname: '',
-        species_id: 3,
+        species_id: '',
         location: '',
         user_id: id
     });
@@ -34,10 +46,8 @@ function CreatePlant(props) {
     const createPlant = (newPlant) => {
         axiosWithAuth().post(`/plants`, newPlant)
             .then((res) => {
-                console.log(res);
-                // need to work on species first
-                // setPlants(res.data);
-                // history.push(`/plants`);
+                // console.log(res);
+                history.push(`/plants`);
             })
             .catch((err) => {
                 console.log(err);
@@ -65,7 +75,6 @@ function CreatePlant(props) {
             <form onSubmit={(e) => {
                 e.preventDefault();
                 createPlant(newPlant);
-                history.push(`/plants`);
                 // console.log(newPlant);
             }}>
                 <input
@@ -84,6 +93,14 @@ function CreatePlant(props) {
                     onChange={handleChange}
                     autoComplete="off"
                 />
+                <select name="species_id" onChange={handleChange}>
+                    {
+                        species.map((x, idx) => {
+                            // { console.log(x.id) }
+                            return <option key={idx} value={x.id}>{x.common_name}</option>
+                        })
+                    }
+                </select>
                 {/* <input
                     type="text"
                     name="species"

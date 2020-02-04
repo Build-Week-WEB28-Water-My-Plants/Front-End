@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { PlantsContext } from '../contexts';
 
 // assets
-import PlantAvatar from '../assets/PlantAvatar.svg';
+// import PlantAvatar from '../assets/PlantAvatar.svg';
 import Water from '../assets/Water.svg';
 
 function Plant(props) {
@@ -39,9 +39,8 @@ function Plant(props) {
 
     return (
         <Card key={props.idx}>
-            {/* {console.log(plant)} */}
             <div className="plant-info">
-                {console.log(plant)}
+                {/* {console.log(plant)} */}
                 <p>Nickname: {plant.nickname}</p>
                 <div className="plant-controls">
                     <div className="water-btn">

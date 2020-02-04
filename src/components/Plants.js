@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 // contexts
 import { PlantsContext } from '../contexts';
-import { UserContext } from '../contexts';
+// import { UserContext } from '../contexts';
 
 // components
 import Plant from './Plant';
@@ -12,7 +12,7 @@ import Plant from './Plant';
 function Plants(props) {
 
     const { plants, setPlants } = useContext(PlantsContext);
-    const { user, setUser } = useContext(UserContext);
+    // const { user, setUser } = useContext(UserContext);
 
     // grab our id so we can render the specific user data
     const id = localStorage.getItem('id');
@@ -27,17 +27,7 @@ function Plants(props) {
             .catch((err) => {
                 console.log(err.response);
             })
-    }, []);
-
-    // useEffect(() => {
-    //     axiosWithAuth().get(`/plants/species/3`)
-    //         .then((res) => {
-    //             console.log(res);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    // })
+    }, [id, setPlants]);
 
     return (
         <Container>

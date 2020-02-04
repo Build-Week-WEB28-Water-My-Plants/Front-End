@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import PrivateRoute from './components/PrivateRoute';
@@ -10,7 +10,6 @@ import { PlantsContext, UserContext } from './contexts';
 import Login from './components/Login';
 import Register from './components/Register';
 import Plants from './components/Plants';
-import Species from './components/Species';
 import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
 import CreateSpecies from './components/CreateSpecies';
@@ -55,7 +54,6 @@ function App() {
             <PrivateRoute path="/plants/:id" component={Edit} />
             <PrivateRoute path="/create" component={CreatePlant} />
             <PrivateRoute path="/create-species" component={CreateSpecies} />
-            <PrivateRoute path="/species" component={Species} />
           </div>
         </UserContext.Provider>
       </PlantsContext.Provider>
