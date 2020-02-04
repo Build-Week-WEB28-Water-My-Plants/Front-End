@@ -17,7 +17,9 @@ function Header(props) {
                 {localStorage.getItem('token') &&
                     <Link to="/plants">Plants</Link>}
                 {localStorage.getItem('token') &&
-                    <Link to="/create">Create</Link>}
+                    <Link to="/create">Create Plant</Link>}
+                {localStorage.getItem('token') &&
+                    <Link to="/create-species">Create Species</Link>}
                 {localStorage.getItem('token') &&
                     <span className="user-cp" onClick={() => {
                         localStorage.clear();

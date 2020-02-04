@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import styled from 'styled-components';
+// import PrivateRoute from '../components/PrivateRoute';
 
 // contexts
 import { PlantsContext } from '../contexts';
@@ -8,6 +9,7 @@ import { PlantsContext } from '../contexts';
 
 // components
 import Plant from './Plant';
+import Edit from './Edit';
 
 function Plants(props) {
 
@@ -27,53 +29,55 @@ function Plants(props) {
             .catch((err) => {
                 console.log(err.response);
             })
-    }, [id, setPlants]);
+    }, []);
 
     return (
         <Container>
-            <h3>Welcome to your Plant Dashboard.</h3>
+            <h3>Welcome to your Plant Dashboard, {localStorage.getItem('username')}.</h3>
             <p className="welcome">You can create new plants from here, as well as update existing plants, or set your reminder to water.</p>
+            {console.log(plants)}
             {
                 plants.map((plant, idx) => {
                     return (
-                        <Plant key={idx} plant={plant} />
+                        <Plant key={idx} plant={plant} setPlants={setPlants} plants={plants} />
                     )
                 })
             }
+            {/* <PrivateRoute exact path="/plants/:id" render={props => <Edit {...props} plants={plants} />} /> */}
         </Container>
     )
 }
 
 const Container = styled.div`
-    width: 100%;
-    color: #444444;
-
+        width: 100%;
+        color: #444444;
+    
     @media (max-width: 575px) {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
+                display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
     h3 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        letter-spacing: 0.1rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px dotted #444444;
-
+                font - size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dotted #444444;
+    
         @media (max-width: 575px) {
-            font-size: 2rem;
+                font - size: 2rem;
             text-align: center;
         }
     }
 
     p.welcome {
-        margin: 3rem 0;
-        padding: 1rem;
-        font-size: 1.8rem;
-
+                margin: 3rem 0;
+            padding: 1rem;
+            font-size: 1.8rem;
+    
         @media (max-width: 575px) {
-            width: 100%;
+                width: 100%;
             padding: 0;
             line-height: 2.5rem;
             font-size: 1.6rem;
@@ -82,8 +86,8 @@ const Container = styled.div`
     }
 
     img {
-        width: 100%;
-    }
-`;
+                width: 100%;
+        }
+    `;
 
 export default Plants;

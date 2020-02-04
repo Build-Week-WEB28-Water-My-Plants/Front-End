@@ -7,7 +7,8 @@ import { useHistory } from 'react-router-dom';
 import { PlantsContext } from '../contexts';
 
 // assets
-import Start from '../assets/Start.svg';
+// import Start from '../assets/Start.svg';
+import Paint from '../assets/Paint.svg';
 
 function CreatePlant(props) {
 
@@ -24,7 +25,7 @@ function CreatePlant(props) {
             .catch((err) => {
                 console.log(err);
             })
-    }, [setSpecies]);
+    }, []);
 
     const id = localStorage.getItem('id');
 
@@ -58,7 +59,7 @@ function CreatePlant(props) {
         <Container>
             <div className="start">
                 <div className="start-img">
-                    <img src={Start} alt="Start creating a plant" />
+                    <img src={Paint} alt="Start creating a plant" />
                 </div>
                 <div className="start-info">
                     <h3>Create Your Plant</h3>
@@ -66,9 +67,8 @@ function CreatePlant(props) {
                     <ol>
                         <li>Give it a nickname</li>
                         <li>Tell us where it's located in your home</li>
-                        {/* <li>Identify its species</li> */}
+                        <li>Identify its species</li>
                         {/* <li>Set how many times it needs to be watered per day</li> */}
-                        {/* <li>Enter an image URL for displaying your plant.</li> */}
                     </ol>
                 </div>
             </div>

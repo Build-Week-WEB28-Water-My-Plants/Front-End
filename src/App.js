@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import PrivateRoute from './components/PrivateRoute';
+import { axiosWithAuth } from './utils/axiosWithAuth';
 
 // contexts
 import { PlantsContext, UserContext } from './contexts';
@@ -10,13 +11,17 @@ import { PlantsContext, UserContext } from './contexts';
 import Login from './components/Login';
 import Register from './components/Register';
 import Plants from './components/Plants';
+import Plant from './components/Plant';
 import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
 import CreateSpecies from './components/CreateSpecies';
 import Home from './components/Home';
 import Header from './components/visual/Header';
+import UserCP from './components/UserCP';
 
 function App() {
+
+  const uid = localStorage.getItem('id');
 
   // state for plants from server (shouldn't need once we have endpoints for users because plant state should then be in the user for their list of created and saved plants)
   const [plants, setPlants] = useState([]);
@@ -31,11 +36,23 @@ function App() {
 
   // loading state for loading messages - needs work
   const [isLoading, setIsLoading] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
+
+  // useEffect(() => {
+  //   axiosWithAuth().get(`/plants/${uid}`)
+  //     .then((res) => {
+  //       console.log(res);
+  //       setPlants(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  // }, [plants, setPlants]);
 
   return (
     <Container>
       <PlantsContext.Provider value={{ plants, setPlants, species, setSpecies }}>
-        <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
+        <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading, isLogged, setIsLogged }}>
           <Header />
           <div className="main-content">
             {/* Unauthenticated routes */}
@@ -50,8 +67,11 @@ function App() {
             <Route path="/register" component={Register} />
 
             {/* Private Routes for authenticated users */}
+            <PrivateRoute path="/usercp" component={UserCP} />
             <PrivateRoute exact path="/plants" component={Plants} />
-            <PrivateRoute path="/plants/:id" component={Edit} />
+            {/* <PrivateRoute path="/plants/:id" component={Edit} /> */}
+            <PrivateRoute exact path="/plants/:id" render={props => <Edit {...props} plants={plants} />} />
+            {/* <PrivateRoute path="/plants/:id" render={props => <Plant {...props} plants={plants} setPlants={setPlants} />} /> */}
             <PrivateRoute path="/create" component={CreatePlant} />
             <PrivateRoute path="/create-species" component={CreateSpecies} />
           </div>

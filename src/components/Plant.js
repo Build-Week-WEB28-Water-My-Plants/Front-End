@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
@@ -10,19 +10,27 @@ import Water from '../assets/Water.svg';
 
 function Plant(props) {
 
+    // const { id } = useParams();
+
     const { setPlants } = useContext(PlantsContext);
+    const { plant, plants } = props;
+
+    // const plantToEdit = plants.find((plant) => `${plant.id}` === id);
+
+    const [toggle, setToggle] = useState(false);
 
     let history = useHistory();
-    const { plant } = props;
+    const uid = localStorage.getItem('id');
 
     const deletePlant = (id) => {
-        axiosWithAuth().delete(`/api/plants/${id}`)
+        axiosWithAuth().delete(`/plants/${id}`)
             .then((res) => {
                 // console.log(res);
-                axiosWithAuth().get(`/api/plants`)
+                axiosWithAuth().get(`/plants/${uid}`)
                     .then((res) => {
                         // console.log(res);
                         setPlants(res.data);
+                        history.push(`/plants`);
                     })
                     .catch((err) => {
                         console.log(err);
@@ -42,22 +50,31 @@ function Plant(props) {
             <div className="plant-info">
                 {/* {console.log(plant)} */}
                 <p>Nickname: {plant.nickname}</p>
-                <div className="plant-controls">
-                    <div className="water-btn">
-                        <img src={Water} alt="Water Your Plant" />
-                        <span>Water</span>
+                <p>Location: {plant.location}</p>
+
+                {/* make toggleable */}
+                {toggle === true && <div className="more-info">
+                    <p>Common Species Name: {plant.common_name}</p>
+                    <p>Scientific Species Name: {plant.scientific_name}</p>
+                    <p>H2O Frequency: {plant.h2o_frequency}</p>
+                    <p onClick={() => { history.push(`/plants/${plant.id}`) }}>View More Info...</p>
+                    <div className="plant-controls">
+                        <div className="water-btn">
+                            <img src={Water} alt="Water Your Plant" />
+                            <span>Water</span>
+                        </div>
+                        <button onClick={() => editPlant(plant.id)}>Edit Plant</button>
+                        <button className="delete" onClick={() => {
+                            deletePlant(plant.id);
+                        }}>Delete Plant</button>
+                        {toggle === true && <p onClick={() => setToggle(!toggle)}>Collapse information...</p>}
                     </div>
-                    <button onClick={() => editPlant(plant.id)}>Edit Plant</button>
-                    <button className="delete" onClick={() => {
-                        deletePlant(plant.id);
-                        history.push(`/plants`);
-                    }}>Delete Plant</button>
-                </div>
+                </div>}
+                {toggle === false && <p onClick={() => setToggle(!toggle)}>View more information...</p>}
             </div>
 
             <div className="plant-avatar">
                 {plant.image_url && <img src={plant.image_url} alt={plant.nickname} />}
-                {/* {!plant.image_url && <img src={PlantAvatar} alt={plant.nickname} />} */}
             </div>
         </Card>
     )
