@@ -57,20 +57,15 @@ function Login(props) {
         axios.post(`https://water-my-plants-1.herokuapp.com/api/users/login`, user)
             .then((res) => {
                 console.log(res);
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('id', res.data.id);
+                localStorage.setItem('token', res.data.payload);
                 setIsLoading(false);
-                setError({
-                    status: false,
-                    message: ''
-                });
                 history.push(`/plants`);
             })
             .catch((err) => {
                 console.log(err.response.data.error);
                 setError({
                     status: true,
-                    message: 'Incorrect login. Try again.'
+                    message: "Incorrect Username or Password"
                 });
                 setUser({
                     ...user,
