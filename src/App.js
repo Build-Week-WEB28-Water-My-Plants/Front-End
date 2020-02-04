@@ -12,6 +12,7 @@ import Register from './components/Register';
 import Plants from './components/Plants';
 import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
+import CreateSpecies from './components/CreateSpecies';
 import Home from './components/Home';
 import Header from './components/visual/Header';
 
@@ -19,6 +20,7 @@ function App() {
 
   // state for plants from server (shouldn't need once we have endpoints for users because plant state should then be in the user for their list of created and saved plants)
   const [plants, setPlants] = useState([]);
+  const [species, setSpecies] = useState([]);
 
   // user state
   const [user, setUser] = useState({
@@ -32,7 +34,7 @@ function App() {
 
   return (
     <Container>
-      <PlantsContext.Provider value={{ plants, setPlants }}>
+      <PlantsContext.Provider value={{ plants, setPlants, species, setSpecies }}>
         <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
           <Header />
           <div className="main-content">
@@ -51,6 +53,7 @@ function App() {
             <PrivateRoute exact path="/plants" component={Plants} />
             <PrivateRoute path="/plants/:id" component={Edit} />
             <PrivateRoute path="/create" component={CreatePlant} />
+            <PrivateRoute path="/create-species" component={CreateSpecies} />
           </div>
         </UserContext.Provider>
       </PlantsContext.Provider>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
@@ -12,15 +12,28 @@ import Start from '../assets/Start.svg';
 function CreatePlant(props) {
 
     let history = useHistory();
-    const { setPlants } = useContext(PlantsContext);
+    const { species, setSpecies } = useContext(PlantsContext);
+
+    // grab list of species to iterate over for options when creating a new plant
+    useEffect(() => {
+        axiosWithAuth().get(`/plants/species`)
+            .then((res) => {
+                // console.log(res);
+                setSpecies(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, [setSpecies]);
+
+    const id = localStorage.getItem('id');
 
     // new plant state
     const [newPlant, setNewPlant] = useState({
         nickname: '',
-        species: '',
-        h2oFrequency: '',
-        image: '',
-        created: Date.now()
+        species_id: '',
+        location: '',
+        user_id: id
     });
 
     const handleChange = (e) => {
@@ -31,10 +44,9 @@ function CreatePlant(props) {
     }
 
     const createPlant = (newPlant) => {
-        axiosWithAuth().post(`/api/plants`, newPlant)
+        axiosWithAuth().post(`/plants`, newPlant)
             .then((res) => {
-                console.log(res);
-                setPlants(res.data);
+                // console.log(res);
                 history.push(`/plants`);
             })
             .catch((err) => {
@@ -53,9 +65,10 @@ function CreatePlant(props) {
                     <p>Creating a plant is easy.</p>
                     <ol>
                         <li>Give it a nickname</li>
-                        <li>Identify its species</li>
-                        <li>Set how many times it needs to be watered per day</li>
-                        <li>Enter an image URL for displaying your plant.</li>
+                        <li>Tell us where it's located in your home</li>
+                        {/* <li>Identify its species</li> */}
+                        {/* <li>Set how many times it needs to be watered per day</li> */}
+                        {/* <li>Enter an image URL for displaying your plant.</li> */}
                     </ol>
                 </div>
             </div>
@@ -74,28 +87,44 @@ function CreatePlant(props) {
                 />
                 <input
                     type="text"
+                    name="location"
+                    placeholder="Location"
+                    value={newPlant.location}
+                    onChange={handleChange}
+                    autoComplete="off"
+                />
+                <select name="species_id" onChange={handleChange}>
+                    {
+                        species.map((x, idx) => {
+                            // { console.log(x.id) }
+                            return <option key={idx} value={x.id}>{x.common_name}</option>
+                        })
+                    }
+                </select>
+                {/* <input
+                    type="text"
                     name="species"
                     placeholder="Species"
                     value={newPlant.species}
                     onChange={handleChange}
                     autoComplete="off"
-                />
-                <input
+                /> */}
+                {/* <input
                     type="text"
                     name="h2oFrequency"
                     placeholder="Water how many times a day?"
                     value={newPlant.h2oFrequency}
                     onChange={handleChange}
                     autoComplete="off"
-                />
-                <input
+                /> */}
+                {/* <input
                     type="url"
                     name="image"
                     placeholder="Enter image URL"
                     value={newPlant.image}
                     onChange={handleChange}
                     autoComplete="off"
-                />
+                /> */}
                 <button type="submit">Create Plant</button>
             </form>
         </Container>

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 // contexts
 import { PlantsContext } from '../contexts';
-import { UserContext } from '../contexts';
+// import { UserContext } from '../contexts';
 
 // components
 import Plant from './Plant';
@@ -12,32 +12,31 @@ import Plant from './Plant';
 function Plants(props) {
 
     const { plants, setPlants } = useContext(PlantsContext);
-    const { user, setUser } = useContext(UserContext);
+    // const { user, setUser } = useContext(UserContext);
 
-    // we need to refactor now to send an authenticated GET request to pull
-    // a user's plants. we just need to figure out how to know what user id to use
-    // for the request
+    // grab our id so we can render the specific user data
+    const id = localStorage.getItem('id');
 
-    // useEffect(() => {
-    //     console.log(user);
-    //     axiosWithAuth().get(`/api/plants/user/:id`)
-    //         .then((res) => {
-    //             console.log(res);
-    //             // setPlants(res.data);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    // }, [setPlants]);
+    useEffect(() => {
+        // console.log(user);
+        axiosWithAuth().get(`/plants/user/${id}`)
+            .then((res) => {
+                // console.log(res);
+                setPlants(res.data);
+            })
+            .catch((err) => {
+                console.log(err.response);
+            })
+    }, [id, setPlants]);
 
     return (
         <Container>
             <h3>Welcome to your Plant Dashboard.</h3>
             <p className="welcome">You can create new plants from here, as well as update existing plants, or set your reminder to water.</p>
             {
-                plants.map((plant) => {
+                plants.map((plant, idx) => {
                     return (
-                        <Plant key={plant.id} plant={plant} />
+                        <Plant key={idx} plant={plant} />
                     )
                 })
             }

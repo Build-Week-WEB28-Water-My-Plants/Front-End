@@ -58,14 +58,19 @@ function Login(props) {
             .then((res) => {
                 console.log(res);
                 localStorage.setItem('token', res.data.token);
+                localStorage.setItem('id', res.data.id);
                 setIsLoading(false);
+                setError({
+                    status: false,
+                    message: ''
+                });
                 history.push(`/plants`);
             })
             .catch((err) => {
                 console.log(err.response.data.error);
                 setError({
                     status: true,
-                    message: err.response.data.error
+                    message: 'Incorrect login. Try again.'
                 });
                 setUser({
                     ...user,
