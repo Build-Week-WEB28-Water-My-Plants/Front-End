@@ -25,19 +25,19 @@ function Plants(props) {
                 setPlants(res.data);
             })
             .catch((err) => {
-                console.log(err);
+                console.log(err.response);
             })
     }, []);
 
-    useEffect(() => {
-        axiosWithAuth().get(`/plants/species/3`)
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    })
+    // useEffect(() => {
+    //     axiosWithAuth().get(`/plants/species/3`)
+    //         .then((res) => {
+    //             console.log(res);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         })
+    // })
 
     return (
         <Container>

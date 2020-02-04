@@ -57,8 +57,8 @@ function Plant(props) {
             </div>
 
             <div className="plant-avatar">
-                {plant.image_url !== '' && <img src={plant.imageUrl} alt={plant.nickname} />}
-                {!plant.image_url && <img src={PlantAvatar} alt={plant.nickname} />}
+                {plant.image_url && <img src={plant.image_url} alt={plant.nickname} />}
+                {/* {!plant.image_url && <img src={PlantAvatar} alt={plant.nickname} />} */}
             </div>
         </Card>
     )
