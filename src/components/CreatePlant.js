@@ -18,9 +18,8 @@ function CreatePlant(props) {
 
     // new plant state
     const [newPlant, setNewPlant] = useState({
-        id: '',
         nickname: '',
-        species_id: '',
+        species_id: 3,
         location: '',
         user_id: id
     });
@@ -33,7 +32,7 @@ function CreatePlant(props) {
     }
 
     const createPlant = (newPlant) => {
-        axiosWithAuth().post(`/api/plants`, newPlant)
+        axiosWithAuth().post(`/plants`, newPlant)
             .then((res) => {
                 console.log(res);
                 // need to work on species first
@@ -56,15 +55,17 @@ function CreatePlant(props) {
                     <p>Creating a plant is easy.</p>
                     <ol>
                         <li>Give it a nickname</li>
-                        <li>Identify its species</li>
-                        <li>Set how many times it needs to be watered per day</li>
-                        <li>Enter an image URL for displaying your plant.</li>
+                        <li>Tell us where it's located in your home</li>
+                        {/* <li>Identify its species</li> */}
+                        {/* <li>Set how many times it needs to be watered per day</li> */}
+                        {/* <li>Enter an image URL for displaying your plant.</li> */}
                     </ol>
                 </div>
             </div>
             <form onSubmit={(e) => {
                 e.preventDefault();
                 createPlant(newPlant);
+                history.push(`/plants`);
                 // console.log(newPlant);
             }}>
                 <input
@@ -77,28 +78,36 @@ function CreatePlant(props) {
                 />
                 <input
                     type="text"
+                    name="location"
+                    placeholder="Location"
+                    value={newPlant.location}
+                    onChange={handleChange}
+                    autoComplete="off"
+                />
+                {/* <input
+                    type="text"
                     name="species"
                     placeholder="Species"
                     value={newPlant.species}
                     onChange={handleChange}
                     autoComplete="off"
-                />
-                <input
+                /> */}
+                {/* <input
                     type="text"
                     name="h2oFrequency"
                     placeholder="Water how many times a day?"
                     value={newPlant.h2oFrequency}
                     onChange={handleChange}
                     autoComplete="off"
-                />
-                <input
+                /> */}
+                {/* <input
                     type="url"
                     name="image"
                     placeholder="Enter image URL"
                     value={newPlant.image}
                     onChange={handleChange}
                     autoComplete="off"
-                />
+                /> */}
                 <button type="submit">Create Plant</button>
             </form>
         </Container>

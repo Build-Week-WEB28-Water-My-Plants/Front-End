@@ -21,22 +21,32 @@ function Plants(props) {
         // console.log(user);
         axiosWithAuth().get(`/plants/user/${id}`)
             .then((res) => {
-                console.log(res);
-                // setPlants(res.data);
+                // console.log(res);
+                setPlants(res.data);
             })
             .catch((err) => {
                 console.log(err);
             })
     }, []);
 
+    useEffect(() => {
+        axiosWithAuth().get(`/plants/species/3`)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    })
+
     return (
         <Container>
             <h3>Welcome to your Plant Dashboard.</h3>
             <p className="welcome">You can create new plants from here, as well as update existing plants, or set your reminder to water.</p>
             {
-                plants.map((plant) => {
+                plants.map((plant, idx) => {
                     return (
-                        <Plant key={plant.id} plant={plant} />
+                        <Plant key={idx} plant={plant} />
                     )
                 })
             }

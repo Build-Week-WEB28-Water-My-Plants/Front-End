@@ -38,13 +38,11 @@ function Plant(props) {
     }
 
     return (
-        <Card key={plant.id}>
+        <Card key={props.idx}>
             {/* {console.log(plant)} */}
             <div className="plant-info">
+                {console.log(plant)}
                 <p>Nickname: {plant.nickname}</p>
-                <p>Species: {plant.species}</p>
-                <p>Water Times per Day: {plant.h2oFrequency}</p>
-                <p>Created: {plant.created}</p>
                 <div className="plant-controls">
                     <div className="water-btn">
                         <img src={Water} alt="Water Your Plant" />
@@ -59,8 +57,8 @@ function Plant(props) {
             </div>
 
             <div className="plant-avatar">
-                {plant.image !== '' && <img src={plant.image} alt={plant.nickname} />}
-                {plant.image === '' && <img src={PlantAvatar} alt={plant.nickname} />}
+                {plant.image_url !== '' && <img src={plant.imageUrl} alt={plant.nickname} />}
+                {!plant.image_url && <img src={PlantAvatar} alt={plant.nickname} />}
             </div>
         </Card>
     )

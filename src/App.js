@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import PrivateRoute from './components/PrivateRoute';
@@ -10,6 +10,7 @@ import { PlantsContext, UserContext } from './contexts';
 import Login from './components/Login';
 import Register from './components/Register';
 import Plants from './components/Plants';
+import Species from './components/Species';
 import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
 import CreateSpecies from './components/CreateSpecies';
@@ -20,6 +21,7 @@ function App() {
 
   // state for plants from server (shouldn't need once we have endpoints for users because plant state should then be in the user for their list of created and saved plants)
   const [plants, setPlants] = useState([]);
+  const [species, setSpecies] = useState([]);
 
   // user state
   const [user, setUser] = useState({
@@ -33,7 +35,7 @@ function App() {
 
   return (
     <Container>
-      <PlantsContext.Provider value={{ plants, setPlants }}>
+      <PlantsContext.Provider value={{ plants, setPlants, species, setSpecies }}>
         <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading }}>
           <Header />
           <div className="main-content">
@@ -53,6 +55,7 @@ function App() {
             <PrivateRoute path="/plants/:id" component={Edit} />
             <PrivateRoute path="/create" component={CreatePlant} />
             <PrivateRoute path="/create-species" component={CreateSpecies} />
+            <PrivateRoute path="/species" component={Species} />
           </div>
         </UserContext.Provider>
       </PlantsContext.Provider>

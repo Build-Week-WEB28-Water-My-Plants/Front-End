@@ -4,11 +4,9 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 function CreateSpecies(props) {
 
     const [newSpecies, setNewSpecies] = useState({
-        id: '',
         common_name: '',
         scientific_name: '',
-        h2o_frequency: '',
-        image_url: ''
+        h2o_frequency: 5
     });
 
     const handleChange = (e) => {
@@ -50,21 +48,21 @@ function CreateSpecies(props) {
                 autoComplete="off"
             />
             <input
-                type="text"
+                type="number"
                 name="h2o_frequency"
                 placeholder="H2O Frequency"
                 value={newSpecies.h2o_frequency}
                 onChange={handleChange}
                 autoComplete="off"
             />
-            <input
+            {/* <input
                 type="url"
                 name="image_url"
                 placeholder="Image URL"
                 value={newSpecies.image_url}
                 onChange={handleChange}
                 autoComplete="off"
-            />
+            /> */}
             <button type="submit">Create Species</button>
         </form>
     )
