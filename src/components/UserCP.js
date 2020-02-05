@@ -26,21 +26,10 @@ function UserCP(props) {
         });
     }
 
-    const updateUsername = (user) => {
+    const updateAccount = (user) => {
         axiosWithAuth().put(`/users/${id}`, user)
             .then((res) => {
                 console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }
-
-    const updatePassword = (user) => {
-        axiosWithAuth().put(`/users/${id}`, user)
-            .then((res) => {
-                console.log(res);
-                // setUser(updatedUser);
             })
             .catch((err) => {
                 console.log(err);
@@ -60,10 +49,10 @@ function UserCP(props) {
                 </div>
             </div>
 
-            <h4>Update Username:</h4>
+            <h4>Update Account:</h4>
             <form onSubmit={(e) => {
                 e.preventDefault();
-                updateUsername(updatedUser);
+                updateAccount(updatedUser);
             }}>
                 <input
                     type="text"
@@ -71,23 +60,17 @@ function UserCP(props) {
                     placeholder="New Phone Number"
                     value={updatedUser.phone_number}
                     onChange={handleChange}
+                    autoComplete="off"
                 />
-                <button type="submit">Update Phone Number</button>
-            </form>
-
-            <h4>Update Password:</h4>
-            <form onSubmit={(e) => {
-                e.preventDefault();
-                updatePassword(updatedUser);
-            }}>
                 <input
                     type="password"
                     name="password"
                     placeholder="New Password"
                     value={updatedUser.password}
                     onChange={handleChange}
+                    autoComplete="off"
                 />
-                <button type="submit">Change Password</button>
+                <button type="submit">Update Account</button>
             </form>
         </Container>
     )

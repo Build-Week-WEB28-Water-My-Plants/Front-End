@@ -37,7 +37,7 @@ function App() {
           <Switch>
             {/* {!isLogged ? <Route exact path="/" component={Login} /> : <Redirect to="/plants" />} */}
             <Route path="/login" component={Login} />
-            <Route exact path="/" component={Login} />
+            <Route exact path="/" component={Register} />
 
             {/* Was trying to redirect authenticated users to plants dashboard if they navigate to /login or /register while logged in */}
             {localStorage.getItem('token') && <Route path="/login" render={() => <Redirect to="/plants" />} />}

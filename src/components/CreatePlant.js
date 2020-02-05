@@ -4,7 +4,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
 
 // contexts
-import { PlantsContext } from '../contexts';
+// import { PlantsContext } from '../contexts';
 
 // assets
 // import Start from '../assets/Start.svg';
@@ -13,44 +13,20 @@ import Paint from '../assets/Paint.svg';
 function CreatePlant(props) {
 
     let history = useHistory();
-    const { plants, setPlants, species, setSpecies } = useContext(PlantsContext);
+    // const { plants, setPlants, species, setSpecies } = useContext(PlantsContext);
+    const uid = localStorage.getItem('id');
 
-    const initialState = {
-        isLogged: !!localStorage.getItem('token'),
-        isLoading: false,
-        user: {
-            id: Number(localStorage.getItem('id'))
-        },
-        plants: JSON.parse(localStorage.getItem('plants')),
-        species: JSON.parse(localStorage.getItem('species'))
-    }
+    // console.log(uid);
 
-    function plantReducer(state, action) {
-        switch (action.type) {
-            case 'START_CREATE':
-                return {
-                    ...state,
-                    isLoading: true
-                }
-            default:
-                return state;
-        }
-    }
-
-    const [state, dispatch] = useReducer(plantReducer, initialState);
-
-    // checking if we have our species, plants, and uid
-    console.log(state.species);
-    console.log(state.plants);
-    console.log(state.user.id)
-
-    // new plant state
     const [newPlant, setNewPlant] = useState({
         nickname: '',
         species_id: '',
         location: '',
-        user_id: state.user.id
+        user_id: uid
     });
+
+    const [species, setSpecies] = useState(JSON.parse(localStorage.getItem('species')));
+    const [plants, setPlants] = useState(JSON.parse(localStorage.getItem('plants')));
 
     const handleChange = (e) => {
         setNewPlant({
@@ -60,10 +36,11 @@ function CreatePlant(props) {
     }
 
     const createPlant = (newPlant) => {
-        dispatch({ type: 'START_CREATE' });
+        // start our creation of a plant
+        // dispatch({ type: 'CREATE_REQUEST' });
         axiosWithAuth().post(`/plants`, newPlant)
             .then((res) => {
-                // console.log(res);
+                console.log(res);
                 history.push(`/plants`);
             })
             .catch((err) => {
@@ -90,7 +67,8 @@ function CreatePlant(props) {
             </div>
             <form onSubmit={(e) => {
                 e.preventDefault();
-                // createPlant(newPlant);
+                createPlant(newPlant);
+                // dispatch(createPlant(newPlant));
                 // console.log(newPlant);
             }}>
                 <input
@@ -109,14 +87,14 @@ function CreatePlant(props) {
                     onChange={handleChange}
                     autoComplete="off"
                 />
-                {/* <select name="species_id" onChange={handleChange}>
+                <select name="species_id" onChange={handleChange}>
                     {
                         species.map((x, idx) => {
                             // { console.log(x.id) }
                             return <option key={idx} value={x.id}>{x.common_name}</option>
                         })
                     }
-                </select> */}
+                </select>
                 {/* <input
                     type="text"
                     name="species"

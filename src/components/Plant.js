@@ -25,12 +25,12 @@ function Plant(props) {
     const deletePlant = (id) => {
         axiosWithAuth().delete(`/plants/${id}`)
             .then((res) => {
-                // console.log(res);
-                axiosWithAuth().get(`/plants/${uid}`)
+                console.log(res);
+                axiosWithAuth().get(`/plants/user/${uid}`)
                     .then((res) => {
-                        // console.log(res);
-                        setPlants(res.data);
-                        history.push(`/plants`);
+                        console.log(res);
+                        // setPlants(res.data);
+                        // history.push(`/plants`);
                     })
                     .catch((err) => {
                         console.log(err);
@@ -64,7 +64,8 @@ function Plant(props) {
                             <span>Water</span>
                         </div>
                         <button onClick={() => editPlant(plant.id)}>Edit Plant</button>
-                        <button className="delete" onClick={() => {
+                        <button className="delete" onClick={(e) => {
+                            e.preventDefault();
                             deletePlant(plant.id);
                         }}>Delete Plant</button>
                         {toggle === true && <p onClick={() => setToggle(!toggle)}>Collapse information...</p>}

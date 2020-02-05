@@ -8,7 +8,7 @@ import { PlantsContext } from '../contexts';
 // import { UserContext } from '../contexts';
 
 // components
-// import Plant from './Plant';
+import Plant from './Plant';
 // import Edit from './Edit';
 
 function Plants(props) {
@@ -106,34 +106,19 @@ function Plants(props) {
             })
     }, [setSpecies]);
 
-    // const { plants, setPlants } = useContext(PlantsContext);
-    // const { user, setUser } = useContext(UserContext);
-
-    // useEffect(() => {
-    //     // console.log(user);
-    //     axiosWithAuth().get(`/plants/user/${id}`)
-    //         .then((res) => {
-    //             // console.log(res);
-    //             setPlants(res.data);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err.response);
-    //         })
-    // }, []);
-
     return (
         <Container>
             {console.log(`was this success?`, plants, species)}
             <h3>Welcome to your Plant Dashboard, {localStorage.getItem('username')}.</h3>
             <p className="welcome">You can create new plants from here, as well as update existing plants, or set your reminder to water.</p>
-            {/* {console.log(plants)}
+            {/* {console.log(plants)} */}
             {
                 plants.map((plant, idx) => {
                     return (
                         <Plant key={idx} plant={plant} setPlants={setPlants} plants={plants} />
                     )
                 })
-            } */}
+            }
             {/* <PrivateRoute exact path="/plants/:id" render={props => <Edit {...props} plants={plants} />} /> */}
         </Container>
     )
