@@ -57,7 +57,6 @@ function Plant(props) {
                     <p>Common Species Name: {plant.common_name}</p>
                     <p>Scientific Species Name: {plant.scientific_name}</p>
                     <p>H2O Frequency: {plant.h2o_frequency}</p>
-                    <p onClick={() => { history.push(`/plants/${plant.id}`) }}>View More Info...</p>
                     <div className="plant-controls">
                         <div className="water-btn">
                             <img src={Water} alt="Water Your Plant" />
@@ -71,7 +70,7 @@ function Plant(props) {
                         {toggle === true && <p onClick={() => setToggle(!toggle)}>Collapse information...</p>}
                     </div>
                 </div>}
-                {toggle === false && <p onClick={() => setToggle(!toggle)}>View more information...</p>}
+                {toggle === false && <div className="view-more" onClick={() => setToggle(!toggle)}>View more information...</div>}
             </div>
 
             <div className="plant-avatar">
@@ -209,6 +208,23 @@ const Card = styled.div`
 
         @media (max-width: 720px) {
             width: 100%;
+        }
+    }
+
+    .view-more {
+        display: flex;
+        justify-content: center;
+        width: 20rem;
+        height: 3rem;
+        border-radius: 0.3rem;
+        color: #d1ffd6;
+
+        .icon {
+            width: 25%;
+
+            img {
+                width: 100%;
+            }
         }
     }
 `;
