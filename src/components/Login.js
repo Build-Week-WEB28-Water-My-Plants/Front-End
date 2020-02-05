@@ -116,7 +116,7 @@ function Login(props) {
             {/* incorrect login error message */}
             {/* {error.status && <p className="incorrect-login">{error.message}</p>} */}
 
-            <form onSubmit={(e) => {
+            {/* <form onSubmit={(e) => {
                 e.preventDefault();
                 log(user);
                 // setError({
@@ -131,7 +131,6 @@ function Login(props) {
                     value={user.username}
                     onChange={handleChange}
                     autoComplete="off"
-                    disabled
                 />
                 <input
                     type="password"
@@ -140,14 +139,13 @@ function Login(props) {
                     value={user.password}
                     onChange={handleChange}
                     autoComplete="off"
-                    disabled
                 />
-                <button type="submit" disabled>Login</button>
-                {/* <div className="extra-options">
+                <button type="submit">Login</button>
+                <div className="extra-options">
                     <span onClick={() => history.push(`/register`)}>Register</span>
                     <span>Forgot Password</span>
-                </div> */}
-            </form>
+                </div>
+            </form> */}
 
             <div className="svg-banner">
                 <img src={View} alt="Woman looking at nature" />
