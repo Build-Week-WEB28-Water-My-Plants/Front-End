@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import styled from 'styled-components';
 
 // contexts
-import { PlantsContext } from '../contexts';
+// import { PlantsContext } from '../contexts';
 // import { UserContext } from '../contexts';
 
 // components
@@ -11,35 +11,35 @@ import Plant from './Plant';
 
 function Plants(props) {
 
-    const { plants, setPlants } = useContext(PlantsContext);
+    // const { plants, setPlants } = useContext(PlantsContext);
     // const { user, setUser } = useContext(UserContext);
 
     // grab our id so we can render the specific user data
     const id = localStorage.getItem('id');
 
-    useEffect(() => {
-        // console.log(user);
-        axiosWithAuth().get(`/plants/user/${id}`)
-            .then((res) => {
-                // console.log(res);
-                setPlants(res.data);
-            })
-            .catch((err) => {
-                console.log(err.response);
-            })
-    }, [id, setPlants]);
+    // useEffect(() => {
+    //     // console.log(user);
+    //     axiosWithAuth().get(`/plants/user/${id}`)
+    //         .then((res) => {
+    //             // console.log(res);
+    //             setPlants(res.data);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err.response);
+    //         })
+    // }, [id, setPlants]);
 
     return (
         <Container>
             <h3>Welcome to your Plant Dashboard.</h3>
             <p className="welcome">You can create new plants from here, as well as update existing plants, or set your reminder to water.</p>
-            {
+            {/* {
                 plants.map((plant, idx) => {
                     return (
                         <Plant key={idx} plant={plant} />
                     )
                 })
-            }
+            } */}
         </Container>
     )
 }

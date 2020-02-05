@@ -1,46 +1,29 @@
 import React, { useContext, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
-// contexts
-import { UserContext } from '../contexts';
+// actions
+import { login } from '../actions';
 
 // assets
 import View from '../assets/View.svg';
 
-// want to refactor all state into using useReducer with context API
-// function loginReducer(state, action) {
-//     switch (action.type) {
-//         default:
-//             return state;
-//     }
-// }
-
-// want to refactor all state into using useReducer with context API
-// const initialState = {
-//     username: '',
-//     password: '',
-//     isLoading: '',
-//     isLoggedIn: '',
-//     error: ''
-// }
-
 function Login(props) {
 
     let history = useHistory();
+    const dispatch = useDispatch();
+    const isLogged = useSelector(state => state.isLogged);
 
     // state for our user
-    const { user, setUser, setIsLoading } = useContext(UserContext);
+    // const { user, setUser, setIsLoading } = useContext(UserContext);
 
-    // want to refactor all state into using useReducer with context API
-    // const [state, dispatch] = useReducer(loginReducer, initialState);
-
-    // extra error state for login
-    const [error, setError] = useState({
-        status: false,
-        message: ''
-    })
+    const [user, setUser] = useState({
+        username: '',
+        password: '',
+        phone: ''
+    });
 
     // handle login form input change
     const handleChange = (e) => {
@@ -52,33 +35,33 @@ function Login(props) {
 
 
     // login function for form submit
-    const log = (user) => {
-        setIsLoading(true);
-        axios.post(`https://water-my-plants-1.herokuapp.com/api/users/login`, user)
-            .then((res) => {
-                console.log(res);
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('id', res.data.id);
-                setIsLoading(false);
-                setError({
-                    status: false,
-                    message: ''
-                });
-                history.push(`/plants`);
-            })
-            .catch((err) => {
-                console.log(err.response.data.error);
-                setError({
-                    status: true,
-                    message: 'Incorrect login. Try again.'
-                });
-                setUser({
-                    ...user,
-                    username: '',
-                    password: ''
-                });
-            })
-    }
+    // const log = (user) => {
+    //     setIsLoading(true);
+    //     axios.post(`https://water-my-plants-1.herokuapp.com/api/users/login`, user)
+    //         .then((res) => {
+    //             console.log(res);
+    //             localStorage.setItem('token', res.data.token);
+    //             localStorage.setItem('id', res.data.id);
+    //             setIsLoading(false);
+    //             setError({
+    //                 status: false,
+    //                 message: ''
+    //             });
+    //             history.push(`/plants`);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err.response.data.error);
+    //             setError({
+    //                 status: true,
+    //                 message: 'Incorrect login. Try again.'
+    //             });
+    //             setUser({
+    //                 ...user,
+    //                 username: '',
+    //                 password: ''
+    //             });
+    //         })
+    // }
 
     return (
         <FormContainer>
@@ -88,15 +71,13 @@ function Login(props) {
             </div>
 
             {/* incorrect login error message */}
-            {error.status && <p className="incorrect-login">{error.message}</p>}
+            {/* {error.status && <p className="incorrect-login">{error.message}</p>} */}
 
             <form onSubmit={(e) => {
                 e.preventDefault();
-                log(user);
-                setError({
-                    status: false,
-                    message: ''
-                });
+                dispatch(login(user));
+                history.push(`/plants`);
+                window.location.reload();
             }}>
                 <input
                     type="text"
