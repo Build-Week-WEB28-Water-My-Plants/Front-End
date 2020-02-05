@@ -10,12 +10,12 @@ import { UserContext } from '../contexts';
 import View from '../assets/View.svg';
 
 // want to refactor all state into using useReducer with context API
-// function loginReducer(state, action) {
-//     switch (action.type) {
-//         default:
-//             return state;
-//     }
-// }
+//function loginReducer(state, action) {
+//  switch (action.type) {
+//    default:
+//      return state;
+//}
+//}
 
 // want to refactor all state into using useReducer with context API
 // const initialState = {
@@ -55,9 +55,9 @@ function Login(props) {
     const log = (user) => {
         setIsLoading(true);
         axios.post(`https://water-my-plants-1.herokuapp.com/api/users/login`, user)
-            .then((res) => {
-                console.log(res);
-                localStorage.setItem('token', res.data.payload);
+            .then((result) => {
+                console.log(result);
+                localStorage.setItem('token', result.data.token);
                 setIsLoading(false);
                 history.push(`/plants`);
             })
@@ -65,7 +65,7 @@ function Login(props) {
                 console.log(err.response.data.error);
                 setError({
                     status: true,
-                    message: "Incorrect Username or Password"
+                    message: "Incorrect Username or Password" //err.response.data.error
                 });
                 setUser({
                     ...user,
