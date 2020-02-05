@@ -13,7 +13,7 @@ import { PlantsContext } from '../contexts';
 
 function Plants(props) {
 
-    const { setPlants, setSpecies } = useContext(PlantsContext);
+    const { plants, species, setPlants, setSpecies } = useContext(PlantsContext);
 
     // define our initial state
     const initialState = {
@@ -74,6 +74,7 @@ function Plants(props) {
                 console.log(res);
                 const data = res.data;
                 setPlants(res.data);
+                localStorage.setItem('plants', JSON.stringify(data));
 
                 // finish off our successful GET request and set our plants in state to our res
                 dispatch({ type: 'GOT_PLANTS', payload: data });
@@ -94,6 +95,7 @@ function Plants(props) {
                 console.log(`our species:`, res);
                 const data = res.data;
                 setSpecies(data);
+                localStorage.setItem('species', JSON.stringify(data));
 
                 // finish off our successful GET request and set our species in state to our res
                 dispatch({ type: 'GOT_SPECIES', payload: data });
@@ -121,7 +123,7 @@ function Plants(props) {
 
     return (
         <Container>
-            {console.log(initialState)}
+            {console.log(`was this success?`, plants, species)}
             <h3>Welcome to your Plant Dashboard, {localStorage.getItem('username')}.</h3>
             <p className="welcome">You can create new plants from here, as well as update existing plants, or set your reminder to water.</p>
             {/* {console.log(plants)}

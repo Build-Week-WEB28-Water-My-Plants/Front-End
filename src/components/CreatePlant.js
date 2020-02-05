@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
@@ -13,28 +13,43 @@ import Paint from '../assets/Paint.svg';
 function CreatePlant(props) {
 
     let history = useHistory();
-    const { species, setSpecies } = useContext(PlantsContext);
+    const { plants, setPlants, species, setSpecies } = useContext(PlantsContext);
 
-    // grab list of species to iterate over for options when creating a new plant
-    useEffect(() => {
-        axiosWithAuth().get(`/plants/species`)
-            .then((res) => {
-                // console.log(res);
-                setSpecies(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }, [setSpecies, species]);
+    const initialState = {
+        isLogged: !!localStorage.getItem('token'),
+        isLoading: false,
+        user: {
+            id: Number(localStorage.getItem('id'))
+        },
+        plants: JSON.parse(localStorage.getItem('plants')),
+        species: JSON.parse(localStorage.getItem('species'))
+    }
 
-    const id = localStorage.getItem('id');
+    function plantReducer(state, action) {
+        switch (action.type) {
+            case 'START_CREATE':
+                return {
+                    ...state,
+                    isLoading: true
+                }
+            default:
+                return state;
+        }
+    }
+
+    const [state, dispatch] = useReducer(plantReducer, initialState);
+
+    // checking if we have our species, plants, and uid
+    console.log(state.species);
+    console.log(state.plants);
+    console.log(state.user.id)
 
     // new plant state
     const [newPlant, setNewPlant] = useState({
         nickname: '',
         species_id: '',
         location: '',
-        user_id: id
+        user_id: state.user.id
     });
 
     const handleChange = (e) => {
@@ -45,6 +60,7 @@ function CreatePlant(props) {
     }
 
     const createPlant = (newPlant) => {
+        dispatch({ type: 'START_CREATE' });
         axiosWithAuth().post(`/plants`, newPlant)
             .then((res) => {
                 // console.log(res);
@@ -74,7 +90,7 @@ function CreatePlant(props) {
             </div>
             <form onSubmit={(e) => {
                 e.preventDefault();
-                createPlant(newPlant);
+                // createPlant(newPlant);
                 // console.log(newPlant);
             }}>
                 <input

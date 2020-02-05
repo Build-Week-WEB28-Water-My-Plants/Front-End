@@ -35,12 +35,13 @@ function App() {
         <div className="main-content">
           {/* Unauthenticated routes */}
           <Switch>
+            {/* {!isLogged ? <Route exact path="/" component={Login} /> : <Redirect to="/plants" />} */}
             <Route path="/login" component={Login} />
             <Route exact path="/" component={Login} />
 
             {/* Was trying to redirect authenticated users to plants dashboard if they navigate to /login or /register while logged in */}
-            {isLogged && <Route path="/login" render={() => <Redirect to="/plants" />} />}
-            {isLogged && <Route path="/register" render={() => <Redirect to="/plants" />} />}
+            {localStorage.getItem('token') && <Route path="/login" render={() => <Redirect to="/plants" />} />}
+            {localStorage.getItem('token') && <Route path="/register" render={() => <Redirect to="/plants" />} />}
 
 
             <Route path="/register" component={Register} />
