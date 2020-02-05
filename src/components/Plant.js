@@ -10,8 +10,6 @@ import Water from '../assets/Water.svg';
 
 function Plant(props) {
 
-    // const { id } = useParams();
-
     let history = useHistory();
 
     const { setPlants } = useContext(PlantsContext);
@@ -21,10 +19,10 @@ function Plant(props) {
     const [edit, setEdit] = useState(false);
     const [plantToEdit, setPlantToEdit] = useState({
         nickname: '',
-        species_id: plant.species_id,
         location: '',
-        scientific_name: '',
-        h2o_frequency: '',
+        // scientific_name: '',
+        // common_species: '',
+        // h2o_frequency: '',
         user_id: uid
     })
 
@@ -59,7 +57,17 @@ function Plant(props) {
     }
 
     const editPlant = (id) => {
-        history.push(`/plants/${id}`);
+        // history.push(`/plants/${id}`);
+        axiosWithAuth().put(`/plants/${id}`, plantToEdit)
+            .then((res) => {
+                console.log(res);
+                // setPlants(res.data);
+                // history.push(`/plants`);
+                window.location.reload();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     return (
@@ -72,6 +80,7 @@ function Plant(props) {
                     placeholder="New Nickname"
                     value={plantToEdit.nickname}
                     onChange={handleChange}
+                    autoComplete="off"
                 />}</p>
                 <p>Location: {!edit ? (<span>{plant.location}</span>) : <input
                     type="text"
@@ -79,16 +88,18 @@ function Plant(props) {
                     placeholder="New Location"
                     value={plantToEdit.location}
                     onChange={handleChange}
+                    autoComplete="off"
                 />}</p>
 
                 {/* make toggleable */}
                 {toggle === true && <div className="more-info">
-                    <p>Common Species Name: {!edit ? (<span>{plant.common_name}</span>) : <input
+                    {/* <p>Common Species Name: {!edit ? (<span>{plant.common_name}</span>) : <input
                         type="text"
-                        name="nickname"
-                        placeholder="New Nickname"
-                        value={plantToEdit.nickname}
+                        name="common_species"
+                        placeholder="New Common Species Name"
+                        value={plantToEdit.common_species}
                         onChange={handleChange}
+                        autoComplete="off"
                     />}</p>
                     <p>Scientific Name: {!edit ? (<span>{plant.scientific_name}</span>) : <input
                         type="text"
@@ -96,6 +107,7 @@ function Plant(props) {
                         placeholder="New Scientific Name"
                         value={plantToEdit.scientific_name}
                         onChange={handleChange}
+                        autoComplete="off"
                     />}</p>
                     <p>H2O Frequency: {!edit ? (<span>{plant.h2o_frequency}</span>) : <input
                         type="number"
@@ -103,7 +115,13 @@ function Plant(props) {
                         placeholder="New H2O Frequency"
                         value={plantToEdit.h2o_frequency}
                         onChange={handleChange}
-                    />}</p>
+                        autoComplete="off"
+                    />}</p> */}
+                    {edit && <button onClick={(e) => {
+                        e.preventDefault();
+                        editPlant(plant.id);
+                        setEdit(false);
+                    }}>Finish Editing</button>}
                     <div className="plant-controls">
                         <div className="water-btn">
                             <img src={Water} alt="Water Your Plant" />
