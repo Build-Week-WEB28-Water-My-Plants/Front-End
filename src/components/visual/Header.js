@@ -1,20 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 function Header(props) {
 
+    // const [isLogged, setIsLogged] = useState(false);
+
+    // useEffect(() => {
+    //     !!localStorage.getItem('token') ? setIsLogged(true) : setIsLogged(false);
+    // }, []);
+
     // let history = useHistory();
-    // const [isLogged, setIsLogged] = useState(!!localStorage.getItem('token'));
 
     return (
         <Container>
+            {/* {console.log(isLogged)} */}
             <h1>PlantWise</h1>
 
             {/* navigation menu / user control panel with some conditional rendering. will need to change with backend auth probably */}
             <nav className="user-cp">
-                {/* <Link to="/">Home</Link> */}
-                {/* {!isLogged &&
+                {/* <Link to="/">Home</Link>
+                {!isLogged &&
                     <Link to="/register">Register</Link>}
                 {!isLogged &&
                     <Link to="/login">Login</Link>}

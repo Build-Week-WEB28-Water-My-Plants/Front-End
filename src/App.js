@@ -30,33 +30,26 @@ function App() {
   return (
     <Container>
       <PlantsContext.Provider value={{ plants, setPlants, species, setSpecies }}>
-        {/* <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading, isLogged, setIsLogged }}> */}
         <Header />
         <div className="main-content">
           {/* Unauthenticated routes */}
           <Switch>
-            {/* {!isLogged ? <Route exact path="/" component={Login} /> : <Redirect to="/plants" />} */}
-            <Route path="/login" component={Login} />
-            <Route exact path="/" component={Register} />
-
             {/* Was trying to redirect authenticated users to plants dashboard if they navigate to /login or /register while logged in */}
             {localStorage.getItem('token') && <Route path="/login" render={() => <Redirect to="/plants" />} />}
             {localStorage.getItem('token') && <Route path="/register" render={() => <Redirect to="/plants" />} />}
 
-
+            <Route path="/login" component={Login} />
+            <Route exact path="/" component={Register} />
             <Route path="/register" component={Register} />
 
             {/* Private Routes for authenticated users */}
             <PrivateRoute path="/usercp" component={UserCP} />
             <PrivateRoute exact path="/plants" component={Plants} />
-            {/* <PrivateRoute path="/plants/:id" component={Edit} /> */}
             <PrivateRoute exact path="/plants/:id" render={props => <Edit {...props} plants={plants} />} />
-            {/* <PrivateRoute path="/plants/:id" render={props => <Plant {...props} plants={plants} setPlants={setPlants} />} /> */}
             <PrivateRoute path="/create" component={CreatePlant} />
             <PrivateRoute path="/create-species" component={CreateSpecies} />
           </Switch>
         </div>
-        {/* </UserContext.Provider> */}
       </PlantsContext.Provider>
     </Container>
   );
