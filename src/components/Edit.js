@@ -1,42 +1,52 @@
-import React, { useContext, useState } from 'react';
-import { PlantsContext } from '../contexts';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
+
+// contexts
+// import { PlantsContext } from '../contexts';
 
 function Edit(props) {
 
-    let history = useHistory();
+    const uid = localStorage.getItem('id');
+    const { plants } = props;
     const { id } = useParams();
-    const { setPlants } = useContext(PlantsContext);
+    // const { setPlants } = useContext(PlantsContext);
 
-    const [toEdit, setToEdit] = useState({
-        id: Number(id),
+    const [plant, setPlant] = useState({
+        id: id,
         nickname: '',
-        species: '',
-        h2oFrequency: '',
-        image: ''
+        location: '',
+        user_id: uid
     });
 
+    useEffect(() => {
+        const plantToEdit = plants.find((plant) => `${plant.id}` === id);
+        setPlant(plantToEdit);
+    }, [plants, id]);
+
+
     const handleChange = (e) => {
-        setToEdit({
-            ...toEdit,
+        setPlant({
+            ...plant,
             [e.target.name]: e.target.value
         });
     }
 
     const editPlant = (plant) => {
-        axiosWithAuth().put(`/api/plants/${plant.id}`, toEdit)
+        // console.log(`plant id:`, toEdit.id);
+        axiosWithAuth().put(`/plants/${id}`, plant)
             .then((res) => {
-                axiosWithAuth().get(`/api/plants`)
-                    .then((res) => {
-                        setPlants(res.data);
-                        // console.log(res);
-                        history.push(`/plants`);
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
+                console.log(res);
+                // axiosWithAuth().get(`/plants/${uid}`)
+                //     .then((res) => {
+                //         setPlants(res.data);
+                //         console.log(res);
+                //         history.push(`/plants`);
+                //     })
+                //     .catch((err) => {
+                //         console.log(err);
+                //     })
             })
             .catch((err) => {
                 console.log(err);
@@ -45,42 +55,35 @@ function Edit(props) {
 
     return (
         <Container>
+            {console.log(plants)}
+            {/* style later */}
+            <div className="header">
+                <h3>Edit Your Plant</h3>
+            </div>
+
             <form onSubmit={(e) => {
                 e.preventDefault();
-                editPlant(toEdit);
+                editPlant(plant);
             }}>
                 <input
                     type="text"
                     name="nickname"
                     placeholder="New Plant Nickname"
-                    value={toEdit.nickname}
+                    value={plant.nickname}
                     onChange={handleChange}
                     autoComplete="off"
                 />
                 <input
                     type="text"
-                    name="species"
-                    placeholder="New Species Name"
-                    value={toEdit.species}
+                    name="location"
+                    placeholder="New Location"
+                    value={plant.location}
                     onChange={handleChange}
                     autoComplete="off"
                 />
-                <input
-                    type="number"
-                    name="h2oFrequency"
-                    placeholder="Water how many times per day?"
-                    value={toEdit.h2oFrequency}
-                    onChange={handleChange}
-                    autoComplete="off"
-                />
-                <input
-                    type="text"
-                    name="image"
-                    placeholder="New image URL"
-                    value={toEdit.image}
-                    onChange={handleChange}
-                    autoComplete="off"
-                />
+                {/* <select name="species">
+
+                    </select> */}
                 <button type="submit">Finish Editing</button>
             </form>
         </Container>
@@ -128,6 +131,12 @@ const Container = styled.div`
                 background: #afdeb4;
             }
         }
+    }
+
+    .header {
+        width: 100%;
+        background: #D1FFD6;
+
     }
 `;
 

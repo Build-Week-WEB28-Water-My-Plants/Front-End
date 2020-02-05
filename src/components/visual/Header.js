@@ -3,12 +3,32 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 function Header(props) {
+
+    // let history = useHistory();
+    // const [isLogged, setIsLogged] = useState(!!localStorage.getItem('token'));
+
     return (
         <Container>
             <h1>PlantWise</h1>
 
             {/* navigation menu / user control panel with some conditional rendering. will need to change with backend auth probably */}
             <nav className="user-cp">
+                {/* <Link to="/">Home</Link> */}
+                {/* {!isLogged &&
+                    <Link to="/register">Register</Link>}
+                {!isLogged &&
+                    <Link to="/login">Login</Link>}
+                {isLogged &&
+                    <Link to="/plants">Plants</Link>}
+                {isLogged &&
+                    <Link to="/create">Create Plant</Link>}
+                {isLogged &&
+                    <Link to="/create-species">Create Species</Link>}
+                {isLogged &&
+                    <span className="user-cp" onClick={() => {
+                        localStorage.clear();
+                        window.location.reload();
+                    }}>Logout</span>} */}
                 <Link to="/">Home</Link>
                 {!localStorage.getItem('token') &&
                     <Link to="/register">Register</Link>}
@@ -17,7 +37,9 @@ function Header(props) {
                 {localStorage.getItem('token') &&
                     <Link to="/plants">Plants</Link>}
                 {localStorage.getItem('token') &&
-                    <Link to="/create">Create</Link>}
+                    <Link to="/create">Create Plant</Link>}
+                {localStorage.getItem('token') &&
+                    <Link to="/create-species">Create Species</Link>}
                 {localStorage.getItem('token') &&
                     <span className="user-cp" onClick={() => {
                         localStorage.clear();

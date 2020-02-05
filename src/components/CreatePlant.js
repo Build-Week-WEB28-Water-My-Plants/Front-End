@@ -1,40 +1,32 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
 
 // contexts
-import { PlantsContext } from '../contexts';
+// import { PlantsContext } from '../contexts';
 
 // assets
-import Start from '../assets/Start.svg';
+// import Start from '../assets/Start.svg';
+import Paint from '../assets/Paint.svg';
 
 function CreatePlant(props) {
 
     let history = useHistory();
-    const { species, setSpecies } = useContext(PlantsContext);
+    // const { plants, setPlants, species, setSpecies } = useContext(PlantsContext);
+    const uid = localStorage.getItem('id');
 
-    // grab list of species to iterate over for options when creating a new plant
-    useEffect(() => {
-        axiosWithAuth().get(`/plants/species`)
-            .then((res) => {
-                // console.log(res);
-                setSpecies(res.data);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }, [setSpecies]);
+    // console.log(uid);
 
-    const id = localStorage.getItem('id');
-
-    // new plant state
     const [newPlant, setNewPlant] = useState({
         nickname: '',
         species_id: '',
         location: '',
-        user_id: id
+        user_id: uid
     });
+
+    const [species, setSpecies] = useState(JSON.parse(localStorage.getItem('species')));
+    const [plants, setPlants] = useState(JSON.parse(localStorage.getItem('plants')));
 
     const handleChange = (e) => {
         setNewPlant({
@@ -44,9 +36,11 @@ function CreatePlant(props) {
     }
 
     const createPlant = (newPlant) => {
+        // start our creation of a plant
+        // dispatch({ type: 'CREATE_REQUEST' });
         axiosWithAuth().post(`/plants`, newPlant)
             .then((res) => {
-                // console.log(res);
+                console.log(res);
                 history.push(`/plants`);
             })
             .catch((err) => {
@@ -58,7 +52,7 @@ function CreatePlant(props) {
         <Container>
             <div className="start">
                 <div className="start-img">
-                    <img src={Start} alt="Start creating a plant" />
+                    <img src={Paint} alt="Start creating a plant" />
                 </div>
                 <div className="start-info">
                     <h3>Create Your Plant</h3>
@@ -66,15 +60,15 @@ function CreatePlant(props) {
                     <ol>
                         <li>Give it a nickname</li>
                         <li>Tell us where it's located in your home</li>
-                        {/* <li>Identify its species</li> */}
+                        <li>Identify its species</li>
                         {/* <li>Set how many times it needs to be watered per day</li> */}
-                        {/* <li>Enter an image URL for displaying your plant.</li> */}
                     </ol>
                 </div>
             </div>
             <form onSubmit={(e) => {
                 e.preventDefault();
                 createPlant(newPlant);
+                // dispatch(createPlant(newPlant));
                 // console.log(newPlant);
             }}>
                 <input

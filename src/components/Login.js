@@ -1,46 +1,61 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
 // contexts
-import { UserContext } from '../contexts';
+// import { UserContext } from '../contexts';
 
 // assets
 import View from '../assets/View.svg';
-
-// want to refactor all state into using useReducer with context API
-// function loginReducer(state, action) {
-//     switch (action.type) {
-//         default:
-//             return state;
-//     }
-// }
-
-// want to refactor all state into using useReducer with context API
-// const initialState = {
-//     username: '',
-//     password: '',
-//     isLoading: '',
-//     isLoggedIn: '',
-//     error: ''
-// }
 
 function Login(props) {
 
     let history = useHistory();
 
-    // state for our user
-    const { user, setUser, setIsLoading } = useContext(UserContext);
+    // user state
+    const [user, setUser] = useState({
+        username: '',
+        password: '',
+        phone_number: ''
+    });
 
-    // want to refactor all state into using useReducer with context API
-    // const [state, dispatch] = useReducer(loginReducer, initialState);
+    const initialState = {
+        isLogged: false,
+        isLoading: false,
+        error: '',
+        user: {
+            username: '',
+            id: '',
+            phone: '',
+            plants: []
+        }
+    }
 
-    // extra error state for login
-    const [error, setError] = useState({
-        status: false,
-        message: ''
-    })
+    function authReducer(state, action) {
+        switch (action.type) {
+            case 'LOGIN_REQUEST':
+                console.log(`hello from login request`);
+                return {
+                    ...state,
+                    isLoading: true,
+                };
+            case 'LOGIN_SUCCESS':
+                console.log(`hello from login success`);
+                history.push(`/plants`);
+                return {
+                    ...state,
+                    isLoading: false,
+                    isLogged: true,
+                    error: '',
+                    user: action.payload
+                }
+            default:
+                return state;
+        }
+    }
+
+    const [state, dispatch] = useReducer(authReducer, initialState);
 
     // handle login form input change
     const handleChange = (e) => {
@@ -53,30 +68,41 @@ function Login(props) {
 
     // login function for form submit
     const log = (user) => {
-        setIsLoading(true);
+        dispatch({ type: 'LOGIN_REQUEST' });
         axios.post(`https://water-my-plants-1.herokuapp.com/api/users/login`, user)
             .then((res) => {
+                const { token, id } = res.data;
                 console.log(res);
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('id', res.data.id);
-                setIsLoading(false);
-                setError({
-                    status: false,
-                    message: ''
-                });
-                history.push(`/plants`);
+
+                const data = {
+                    username: user.username,
+                    id: id
+                }
+
+                localStorage.setItem('token', token);
+                localStorage.setItem('id', id);
+                localStorage.setItem('username', user.username);
+                dispatch({ type: 'LOGIN_SUCCESS', payload: data })
+                // setIsLogged(true);
+                // setIsLoading(false);
+                // setError({
+                //     status: false,
+                //     message: ''
+                // });
+                // history.push(`/plants`);
             })
             .catch((err) => {
-                console.log(err.response.data.error);
-                setError({
-                    status: true,
-                    message: 'Incorrect login. Try again.'
-                });
-                setUser({
-                    ...user,
-                    username: '',
-                    password: ''
-                });
+                console.log(err);
+                // console.log(err.response.data.error);
+                // setError({
+                //     status: true,
+                //     message: 'Incorrect login. Try again.'
+                // });
+                // setUser({
+                //     ...user,
+                //     username: '',
+                //     password: ''
+                // });
             })
     }
 
@@ -88,15 +114,15 @@ function Login(props) {
             </div>
 
             {/* incorrect login error message */}
-            {error.status && <p className="incorrect-login">{error.message}</p>}
+            {/* {error.status && <p className="incorrect-login">{error.message}</p>} */}
 
             <form onSubmit={(e) => {
                 e.preventDefault();
                 log(user);
-                setError({
-                    status: false,
-                    message: ''
-                });
+                // setError({
+                //     status: false,
+                //     message: ''
+                // });
             }}>
                 <input
                     type="text"
@@ -134,54 +160,44 @@ const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-
     .svg-banner {
         display: flex;
         justify-content: center;
-
         img {
             width: 80%;
         }
     }
-
     .incorrect-login {
         margin-top: 3rem;
         color: #872a26;
         font-size: 1.4rem;
     }
-
     span {
         margin-top: 0.5rem;
         font-size: 1.2rem;
-
         &:hover {
             cursor: pointer;
         }
     }
-
     .login-message {
         h2 {
             font-size: 3rem;
             color: #5f7361;
         }
-
         p {
             margin-top: 1rem;
             font-size: 1.6rem;
             font-weight: 300;
             letter-spacing: 0.1rem;
             color: #444444;
-
             @media (max-width: 451px) {
                 font-size: 1.4rem;                
             }
-
             @media (max-width: 403px) {
                 font-size: 1.2rem;                
             }
         }
     }
-
     form {
         padding: 2.5rem 0;
         display: flex;
@@ -189,15 +205,12 @@ const FormContainer = styled.div`
         align-items: center;
         width: 60%;
         margin-bottom: 5%;
-
         @media (max-width: 1440px) {
             width: 70%;
         }
-
         @media (max-width: 1245px) {
             width: 80%;
         }
-
         @media (max-width: 1085px) {
             width: 90%;
         }
@@ -205,12 +218,10 @@ const FormContainer = styled.div`
         @media (max-width: 965px) {
             width: 100%;
         }
-
         @media (max-width: 850px) {
             flex-direction: column;
         }
     }
-
     input {
         margin: 0.5rem 0;
         width: 20rem;
@@ -222,13 +233,11 @@ const FormContainer = styled.div`
         font-size: 1.2rem;
         font-weight: 300;
         letter-spacing: 0.1rem;
-
         &:focus {
             outline: none;
             border: 1px solid #ababab;
         }
     }
-
     button {
         width: 20rem;
         height: 3.5rem;
@@ -239,20 +248,17 @@ const FormContainer = styled.div`
         transition: all 100ms;
         box-shadow: 0px 2px 5px -5px;
         letter-spacing: 0.1rem;
-
         &:hover {
             transition: background 100ms;
             cursor: pointer;
             background: #afdeb4;
         }
     }
-
     .extra-options {
         width: 30%;
         display: flex;
         justify-content: space-evenly;
     }
-
 `;
 
 export default Login;

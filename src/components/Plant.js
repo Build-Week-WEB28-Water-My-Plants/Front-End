@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
@@ -10,19 +10,27 @@ import Water from '../assets/Water.svg';
 
 function Plant(props) {
 
-    const { setPlants } = useContext(PlantsContext);
+    // const { id } = useParams();
 
-    let history = useHistory();
+    const { setPlants } = useContext(PlantsContext);
     const { plant } = props;
 
+    // const plantToEdit = plants.find((plant) => `${plant.id}` === id);
+
+    const [toggle, setToggle] = useState(false);
+
+    let history = useHistory();
+    const uid = localStorage.getItem('id');
+
     const deletePlant = (id) => {
-        axiosWithAuth().delete(`/api/plants/${id}`)
+        axiosWithAuth().delete(`/plants/${id}`)
             .then((res) => {
-                // console.log(res);
-                axiosWithAuth().get(`/api/plants`)
+                console.log(res);
+                axiosWithAuth().get(`/plants/user/${uid}`)
                     .then((res) => {
-                        // console.log(res);
-                        setPlants(res.data);
+                        console.log(res);
+                        // setPlants(res.data);
+                        // history.push(`/plants`);
                     })
                     .catch((err) => {
                         console.log(err);
@@ -42,22 +50,31 @@ function Plant(props) {
             <div className="plant-info">
                 {/* {console.log(plant)} */}
                 <p>Nickname: {plant.nickname}</p>
-                <div className="plant-controls">
-                    <div className="water-btn">
-                        <img src={Water} alt="Water Your Plant" />
-                        <span>Water</span>
+                <p>Location: {plant.location}</p>
+
+                {/* make toggleable */}
+                {toggle === true && <div className="more-info">
+                    <p>Common Species Name: {plant.common_name}</p>
+                    <p>Scientific Species Name: {plant.scientific_name}</p>
+                    <p>H2O Frequency: {plant.h2o_frequency}</p>
+                    <div className="plant-controls">
+                        <div className="water-btn">
+                            <img src={Water} alt="Water Your Plant" />
+                            <span>Water</span>
+                        </div>
+                        <button onClick={() => editPlant(plant.id)}>Edit Plant</button>
+                        <button className="delete" onClick={(e) => {
+                            e.preventDefault();
+                            deletePlant(plant.id);
+                        }}>Delete Plant</button>
+                        {toggle === true && <p onClick={() => setToggle(!toggle)}>Collapse information...</p>}
                     </div>
-                    <button onClick={() => editPlant(plant.id)}>Edit Plant</button>
-                    <button className="delete" onClick={() => {
-                        deletePlant(plant.id);
-                        history.push(`/plants`);
-                    }}>Delete Plant</button>
-                </div>
+                </div>}
+                {toggle === false && <div className="view-more" onClick={() => setToggle(!toggle)}>View more information...</div>}
             </div>
 
             <div className="plant-avatar">
                 {plant.image_url && <img src={plant.image_url} alt={plant.nickname} />}
-                {/* {!plant.image_url && <img src={PlantAvatar} alt={plant.nickname} />} */}
             </div>
         </Card>
     )
@@ -191,6 +208,23 @@ const Card = styled.div`
 
         @media (max-width: 720px) {
             width: 100%;
+        }
+    }
+
+    .view-more {
+        display: flex;
+        justify-content: center;
+        width: 20rem;
+        height: 3rem;
+        border-radius: 0.3rem;
+        color: #d1ffd6;
+
+        .icon {
+            width: 25%;
+
+            img {
+                width: 100%;
+            }
         }
     }
 `;
