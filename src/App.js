@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import React, { useState, useReducer } from 'react';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import PrivateRoute from './components/PrivateRoute';
 import { axiosWithAuth } from './utils/axiosWithAuth';
@@ -21,22 +21,16 @@ import UserCP from './components/UserCP';
 
 function App() {
 
-  const uid = localStorage.getItem('id');
+  // const uid = localStorage.getItem('id');
 
-  // state for plants from server (shouldn't need once we have endpoints for users because plant state should then be in the user for their list of created and saved plants)
   const [plants, setPlants] = useState([]);
   const [species, setSpecies] = useState([]);
 
-  // user state
-  const [user, setUser] = useState({
-    username: '',
-    password: '',
-    phone_number: ''
-  });
+  const [isLogged, setIsLogged] = useState(!!localStorage.getItem('token'));
 
   // loading state for loading messages - needs work
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLogged, setIsLogged] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [isLogged, setIsLogged] = useState(false);
 
   // useEffect(() => {
   //   axiosWithAuth().get(`/plants/${uid}`)
@@ -52,16 +46,16 @@ function App() {
   return (
     <Container>
       <PlantsContext.Provider value={{ plants, setPlants, species, setSpecies }}>
-        <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading, isLogged, setIsLogged }}>
-          <Header />
-          <div className="main-content">
-            {/* Unauthenticated routes */}
-            <Route exact path="/" component={Home} />
-            {!localStorage.getItem('token') && <Route path="/login" component={Login} />}
-
+        {/* <UserContext.Provider value={{ user, setUser, isLoading, setIsLoading, isLogged, setIsLogged }}> */}
+        <Header />
+        <div className="main-content">
+          {/* Unauthenticated routes */}
+          <Switch>
+            <Route exact path="/" component={Login} />
+            <Route path="/login" component={Login} />
             {/* Was trying to redirect authenticated users to plants dashboard if they navigate to /login or /register while logged in */}
-            {localStorage.getItem('token') && <Route path="/login" render={() => <Redirect to="/plants" />} />}
-            {localStorage.getItem('token') && <Route path="/register" render={() => <Redirect to="/plants" />} />}
+            {/* {isLogged && <Route path="/login" render={() => <Redirect to="/plants" />} />}
+          {isLogged && <Route path="/register" render={() => <Redirect to="/plants" />} />} */}
 
 
             <Route path="/register" component={Register} />
@@ -74,8 +68,9 @@ function App() {
             {/* <PrivateRoute path="/plants/:id" render={props => <Plant {...props} plants={plants} setPlants={setPlants} />} /> */}
             <PrivateRoute path="/create" component={CreatePlant} />
             <PrivateRoute path="/create-species" component={CreateSpecies} />
-          </div>
-        </UserContext.Provider>
+          </Switch>
+        </div>
+        {/* </UserContext.Provider> */}
       </PlantsContext.Provider>
     </Container>
   );

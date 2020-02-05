@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useReducer } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
@@ -28,25 +28,60 @@ import View from '../assets/View.svg';
 
 function Login(props) {
 
-    // useEffect(() => {
-    //     setIsLogged(true);
-    // }, [log]);
-
     let history = useHistory();
 
+    // user state
+    const [user, setUser] = useState({
+        username: '',
+        password: '',
+        phone_number: ''
+    });
+
+    const initialState = {
+        isLogged: false,
+        isLoading: false,
+        error: '',
+        user: {
+            username: '',
+            id: '',
+            phone: '',
+            plants: []
+        }
+    }
+
+    function authReducer(state, action) {
+        switch (action.type) {
+            case 'LOGIN_REQUEST':
+                console.log(`hello from login request`);
+                return {
+                    ...state,
+                    isLoading: true,
+                };
+            case 'LOGIN_SUCCESS':
+                console.log(`hello from login success`);
+                history.push(`/plants`);
+                return {
+                    ...state,
+                    isLoading: false,
+                    isLogged: true,
+                    error: '',
+                    user: action.payload
+                }
+            default:
+                return state;
+        }
+    }
+
+    const [state, dispatch] = useReducer(authReducer, initialState);
+
     // state for our user
-    const { user, setUser, setIsLoading, isLogged, setIsLogged } = useContext(UserContext);
+    // const { user, setUser, setIsLoading, isLogged, setIsLogged } = useContext(UserContext);
 
     // want to refactor all state into using useReducer with context API
     // const [state, dispatch] = useReducer(loginReducer, initialState);
 
     // extra error state for login
-    const [error, setError] = useState({
-        status: false,
-        message: ''
-    })
-
-    // const [success, setSuccess] = useState({
+    // const [error, setError] = useState({
     //     status: false,
     //     message: ''
     // })
@@ -62,32 +97,41 @@ function Login(props) {
 
     // login function for form submit
     const log = (user) => {
-        setIsLoading(true);
+        dispatch({ type: 'LOGIN_REQUEST' });
         axios.post(`https://water-my-plants-1.herokuapp.com/api/users/login`, user)
             .then((res) => {
+                const { token, id } = res.data;
                 console.log(res);
-                localStorage.setItem('token', res.data.token);
-                localStorage.setItem('id', res.data.id);
+
+                const data = {
+                    username: user.username,
+                    id: id
+                }
+
+                localStorage.setItem('token', token);
+                localStorage.setItem('id', id);
                 localStorage.setItem('username', user.username);
-                setIsLogged(true);
-                setIsLoading(false);
-                setError({
-                    status: false,
-                    message: ''
-                });
-                history.push(`/plants`);
+                dispatch({ type: 'LOGIN_SUCCESS', payload: data })
+                // setIsLogged(true);
+                // setIsLoading(false);
+                // setError({
+                //     status: false,
+                //     message: ''
+                // });
+                // history.push(`/plants`);
             })
             .catch((err) => {
-                console.log(err.response.data.error);
-                setError({
-                    status: true,
-                    message: 'Incorrect login. Try again.'
-                });
-                setUser({
-                    ...user,
-                    username: '',
-                    password: ''
-                });
+                console.log(err);
+                // console.log(err.response.data.error);
+                // setError({
+                //     status: true,
+                //     message: 'Incorrect login. Try again.'
+                // });
+                // setUser({
+                //     ...user,
+                //     username: '',
+                //     password: ''
+                // });
             })
     }
 
@@ -99,15 +143,15 @@ function Login(props) {
             </div>
 
             {/* incorrect login error message */}
-            {error.status && <p className="incorrect-login">{error.message}</p>}
+            {/* {error.status && <p className="incorrect-login">{error.message}</p>} */}
 
             <form onSubmit={(e) => {
                 e.preventDefault();
                 log(user);
-                setError({
-                    status: false,
-                    message: ''
-                });
+                // setError({
+                //     status: false,
+                //     message: ''
+                // });
             }}>
                 <input
                     type="text"
