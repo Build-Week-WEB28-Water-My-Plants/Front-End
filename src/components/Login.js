@@ -131,6 +131,7 @@ function Login(props) {
                     value={user.username}
                     onChange={handleChange}
                     autoComplete="off"
+                    disabled
                 />
                 <input
                     type="password"
@@ -139,8 +140,9 @@ function Login(props) {
                     value={user.password}
                     onChange={handleChange}
                     autoComplete="off"
+                    disabled
                 />
-                <button type="submit">Login</button>
+                <button type="submit" disabled>Login</button>
                 {/* <div className="extra-options">
                     <span onClick={() => history.push(`/register`)}>Register</span>
                     <span>Forgot Password</span>

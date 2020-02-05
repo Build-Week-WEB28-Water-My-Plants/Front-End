@@ -61,6 +61,7 @@ function Register(props) {
                     value={newUser.username}
                     onChange={handleChange}
                     autoComplete="off"
+                    disabled
                 />
                 <input
                     type="password"
@@ -69,6 +70,7 @@ function Register(props) {
                     value={newUser.password}
                     onChange={handleChange}
                     autoComplete="off"
+                    disabled
                 />
                 <input
                     type="tel"
@@ -77,8 +79,9 @@ function Register(props) {
                     value={newUser.phone_number}
                     onChange={handleChange}
                     autoComplete="off"
+                    disabled
                 />
-                <button type="submit">Register</button>
+                <button type="submit" disabled>Register</button>
                 <div className="extra-options">
                     <span onClick={() => history.push(`/login`)}>Already have an account? Login</span>
                 </div>
