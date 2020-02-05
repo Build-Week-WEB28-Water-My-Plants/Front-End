@@ -36,21 +36,21 @@ function Plants(props) {
                     isLoading: true
                 }
             case 'GOT_PLANTS':
-                console.log(`hello from got plants`, action.payload);
+                // console.log(`hello from got plants`, action.payload);
                 return {
                     ...state,
                     isLoading: false,
                     plants: action.payload
                 }
             case 'GET_SPECIES':
-                console.log(`hello we are getting the species`);
+                // console.log(`hello we are getting the species`);
                 return {
                     ...state,
                     isLoading: true,
                     species: []
                 }
             case 'GOT_SPECIES':
-                console.log(`congrats, we got our species successfully`);
+                // console.log(`congrats, we got our species successfully`);
                 return {
                     ...state,
                     isLoading: false,
@@ -71,7 +71,7 @@ function Plants(props) {
         // authenticated GET to retrieve plants owned by the logged in user
         axiosWithAuth().get(`/plants/user/${state.user.id}`)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 const data = res.data;
                 setPlants(res.data);
                 localStorage.setItem('plants', JSON.stringify(data));

@@ -9,6 +9,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 function Edit(props) {
 
     const uid = localStorage.getItem('id');
+
     const { plants } = props;
     const { id } = useParams();
     // const { setPlants } = useContext(PlantsContext);
