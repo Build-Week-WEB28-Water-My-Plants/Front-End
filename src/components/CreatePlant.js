@@ -18,15 +18,17 @@ function CreatePlant(props) {
 
     // console.log(uid);
 
+    // const { setPlants } = useContext(PlantsContext);
+
     const [newPlant, setNewPlant] = useState({
         nickname: '',
-        species_id: '',
+        species_id: Number(null),
         location: '',
         user_id: uid
     });
 
     const [species, setSpecies] = useState(JSON.parse(localStorage.getItem('species')));
-    const [plants, setPlants] = useState(JSON.parse(localStorage.getItem('plants')));
+    // const [plants, setPlants] = useState(JSON.parse(localStorage.getItem('plants')));
 
     const handleChange = (e) => {
         setNewPlant({
@@ -91,7 +93,7 @@ function CreatePlant(props) {
                     {
                         species.map((x, idx) => {
                             // { console.log(x.id) }
-                            return <option key={idx} value={x.id}>{x.common_name}</option>
+                            return <option key={idx} value={Number(x.id)}>{x.common_name}</option>
                         })
                     }
                 </select>

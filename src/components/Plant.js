@@ -12,15 +12,32 @@ function Plant(props) {
 
     // const { id } = useParams();
 
+    let history = useHistory();
+
     const { setPlants } = useContext(PlantsContext);
     const { plant } = props;
+    const uid = Number(localStorage.getItem('id'));
+
+    const [edit, setEdit] = useState(false);
+    const [plantToEdit, setPlantToEdit] = useState({
+        nickname: '',
+        species_id: plant.species_id,
+        location: '',
+        scientific_name: '',
+        h2o_frequency: '',
+        user_id: uid
+    })
+
+    const handleChange = (e) => {
+        setPlantToEdit({
+            ...plantToEdit,
+            [e.target.name]: e.target.value
+        });
+    }
 
     // const plantToEdit = plants.find((plant) => `${plant.id}` === id);
 
     const [toggle, setToggle] = useState(false);
-
-    let history = useHistory();
-    const uid = localStorage.getItem('id');
 
     const deletePlant = (id) => {
         axiosWithAuth().delete(`/plants/${id}`)
@@ -29,8 +46,8 @@ function Plant(props) {
                 axiosWithAuth().get(`/plants/user/${uid}`)
                     .then((res) => {
                         console.log(res);
-                        // setPlants(res.data);
-                        // history.push(`/plants`);
+                        setPlants(res.data);
+                        history.push(`/plants`);
                     })
                     .catch((err) => {
                         console.log(err);
@@ -49,25 +66,55 @@ function Plant(props) {
         <Card key={props.idx}>
             <div className="plant-info">
                 {/* {console.log(plant)} */}
-                <p>Nickname: {plant.nickname}</p>
-                <p>Location: {plant.location}</p>
+                <p>Nickname: {!edit ? (<span>{plant.nickname}</span>) : <input
+                    type="text"
+                    name="nickname"
+                    placeholder="New Nickname"
+                    value={plantToEdit.nickname}
+                    onChange={handleChange}
+                />}</p>
+                <p>Location: {!edit ? (<span>{plant.location}</span>) : <input
+                    type="text"
+                    name="location"
+                    placeholder="New Location"
+                    value={plantToEdit.location}
+                    onChange={handleChange}
+                />}</p>
 
                 {/* make toggleable */}
                 {toggle === true && <div className="more-info">
-                    <p>Common Species Name: {plant.common_name}</p>
-                    <p>Scientific Species Name: {plant.scientific_name}</p>
-                    <p>H2O Frequency: {plant.h2o_frequency}</p>
+                    <p>Common Species Name: {!edit ? (<span>{plant.common_name}</span>) : <input
+                        type="text"
+                        name="nickname"
+                        placeholder="New Nickname"
+                        value={plantToEdit.nickname}
+                        onChange={handleChange}
+                    />}</p>
+                    <p>Scientific Name: {!edit ? (<span>{plant.scientific_name}</span>) : <input
+                        type="text"
+                        name="scientific_name"
+                        placeholder="New Scientific Name"
+                        value={plantToEdit.scientific_name}
+                        onChange={handleChange}
+                    />}</p>
+                    <p>H2O Frequency: {!edit ? (<span>{plant.h2o_frequency}</span>) : <input
+                        type="number"
+                        name="h2o_frequency"
+                        placeholder="New H2O Frequency"
+                        value={plantToEdit.h2o_frequency}
+                        onChange={handleChange}
+                    />}</p>
                     <div className="plant-controls">
                         <div className="water-btn">
                             <img src={Water} alt="Water Your Plant" />
                             <span>Water</span>
                         </div>
-                        <button onClick={() => editPlant(plant.id)}>Edit Plant</button>
+                        <button onClick={() => setEdit(!edit)}>Edit Plant</button>
                         <button className="delete" onClick={(e) => {
                             e.preventDefault();
                             deletePlant(plant.id);
                         }}>Delete Plant</button>
-                        {toggle === true && <p onClick={() => setToggle(!toggle)}>Collapse information...</p>}
+                        {toggle === true && <div className="collapse" onClick={() => setToggle(!toggle)}>Collapse information...</div>}
                     </div>
                 </div>}
                 {toggle === false && <div className="view-more" onClick={() => setToggle(!toggle)}>View more information...</div>}
@@ -114,10 +161,12 @@ const Card = styled.div`
             }
     
             .plant-controls {
-                width: 45rem;
+                border: 1px solid red;
+                width: 60rem;
                 margin-top: 5rem;
                 display: flex;
                 justify-content: space-evenly;
+                align-items: center;
                 // border: 1px solid red;
 
                 @media (max-width: 1080px) {
@@ -211,13 +260,26 @@ const Card = styled.div`
         }
     }
 
-    .view-more {
+    .view-more, .collapse {
+        margin: 1rem 0;
         display: flex;
         justify-content: center;
+        align-items: center;
         width: 20rem;
         height: 3rem;
         border-radius: 0.3rem;
-        color: #d1ffd6;
+        background: #d1ffd6;
+        color: #444444;
+        font-weight: 300;
+        letter-spacing: 0.1rem;
+        transition: all 300ms;
+        font-size: 1.4rem;
+
+        &:hover {
+            transition: opacity 300ms;
+            opacity: 0.8;
+            cursor: pointer;
+        }
 
         .icon {
             width: 25%;
