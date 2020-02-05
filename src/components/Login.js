@@ -1,30 +1,13 @@
-import React, { useContext, useState, useReducer } from 'react';
+import React, { useState, useReducer } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
 // contexts
-import { UserContext } from '../contexts';
+// import { UserContext } from '../contexts';
 
 // assets
 import View from '../assets/View.svg';
-
-// want to refactor all state into using useReducer with context API
-// function loginReducer(state, action) {
-//     switch (action.type) {
-//         default:
-//             return state;
-//     }
-// }
-
-// want to refactor all state into using useReducer with context API
-// const initialState = {
-//     username: '',
-//     password: '',
-//     isLoading: '',
-//     isLoggedIn: '',
-//     error: ''
-// }
 
 function Login(props) {
 
@@ -73,18 +56,6 @@ function Login(props) {
     }
 
     const [state, dispatch] = useReducer(authReducer, initialState);
-
-    // state for our user
-    // const { user, setUser, setIsLoading, isLogged, setIsLogged } = useContext(UserContext);
-
-    // want to refactor all state into using useReducer with context API
-    // const [state, dispatch] = useReducer(loginReducer, initialState);
-
-    // extra error state for login
-    // const [error, setError] = useState({
-    //     status: false,
-    //     message: ''
-    // })
 
     // handle login form input change
     const handleChange = (e) => {

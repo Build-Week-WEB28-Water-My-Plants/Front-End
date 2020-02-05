@@ -1,18 +1,17 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 // contexts
-import { PlantsContext } from '../contexts';
+// import { PlantsContext } from '../contexts';
 
 function Edit(props) {
 
     const uid = localStorage.getItem('id');
-    let history = useHistory();
     const { plants } = props;
     const { id } = useParams();
-    const { setPlants } = useContext(PlantsContext);
+    // const { setPlants } = useContext(PlantsContext);
 
     const [plant, setPlant] = useState({
         id: id,

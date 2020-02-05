@@ -1,21 +1,20 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
 import PrivateRoute from './components/PrivateRoute';
-import { axiosWithAuth } from './utils/axiosWithAuth';
 
 // contexts
-import { PlantsContext, UserContext } from './contexts';
+import { PlantsContext } from './contexts';
 
 // components
 import Login from './components/Login';
 import Register from './components/Register';
 import Plants from './components/Plants';
-import Plant from './components/Plant';
+// import Plant from './components/Plant';
 import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
 import CreateSpecies from './components/CreateSpecies';
-import Home from './components/Home';
+// import Home from './components/Home';
 import Header from './components/visual/Header';
 import UserCP from './components/UserCP';
 
@@ -28,21 +27,6 @@ function App() {
 
   const [isLogged, setIsLogged] = useState(!!localStorage.getItem('token'));
 
-  // loading state for loading messages - needs work
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [isLogged, setIsLogged] = useState(false);
-
-  // useEffect(() => {
-  //   axiosWithAuth().get(`/plants/${uid}`)
-  //     .then((res) => {
-  //       console.log(res);
-  //       setPlants(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     })
-  // }, [plants, setPlants]);
-
   return (
     <Container>
       <PlantsContext.Provider value={{ plants, setPlants, species, setSpecies }}>
@@ -51,11 +35,12 @@ function App() {
         <div className="main-content">
           {/* Unauthenticated routes */}
           <Switch>
-            <Route exact path="/" component={Login} />
             <Route path="/login" component={Login} />
+            <Route exact path="/" component={Login} />
+
             {/* Was trying to redirect authenticated users to plants dashboard if they navigate to /login or /register while logged in */}
-            {/* {isLogged && <Route path="/login" render={() => <Redirect to="/plants" />} />}
-          {isLogged && <Route path="/register" render={() => <Redirect to="/plants" />} />} */}
+            {isLogged && <Route path="/login" render={() => <Redirect to="/plants" />} />}
+            {isLogged && <Route path="/register" render={() => <Redirect to="/plants" />} />}
 
 
             <Route path="/register" component={Register} />

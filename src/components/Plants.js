@@ -8,12 +8,12 @@ import { PlantsContext } from '../contexts';
 // import { UserContext } from '../contexts';
 
 // components
-import Plant from './Plant';
-import Edit from './Edit';
+// import Plant from './Plant';
+// import Edit from './Edit';
 
 function Plants(props) {
 
-    const { setPlants } = useContext(PlantsContext);
+    const { setPlants, setSpecies } = useContext(PlantsContext);
 
     // define our initial state
     const initialState = {
@@ -23,7 +23,8 @@ function Plants(props) {
         user: {
             id: Number(localStorage.getItem('id'))
         },
-        plants: []
+        plants: [],
+        species: []
     }
 
     // reducer to handle user actions with plants
@@ -41,6 +42,20 @@ function Plants(props) {
                     isLoading: false,
                     plants: action.payload
                 }
+            case 'GET_SPECIES':
+                console.log(`hello we are getting the species`);
+                return {
+                    ...state,
+                    isLoading: true,
+                    species: []
+                }
+            case 'GOT_SPECIES':
+                console.log(`congrats, we got our species successfully`);
+                return {
+                    ...state,
+                    isLoading: false,
+                    species: action.payload
+                }
             default:
                 return state;
         }
@@ -49,19 +64,45 @@ function Plants(props) {
     // using the useReducer hook with our initial state
     const [state, dispatch] = useReducer(plantReducer, initialState);
 
+    // whenever our user id changes or plants changes, run
     useEffect(() => {
-        dispatch({ type: 'GET_PLANTS' });
+        dispatch({ type: 'GET_PLANTS' }); // begin our GET request
+
+        // authenticated GET to retrieve plants owned by the logged in user
         axiosWithAuth().get(`/plants/user/${state.user.id}`)
             .then((res) => {
                 console.log(res);
                 const data = res.data;
                 setPlants(res.data);
+
+                // finish off our successful GET request and set our plants in state to our res
                 dispatch({ type: 'GOT_PLANTS', payload: data });
             })
             .catch((err) => {
+                // need to work on error handling
                 console.log(err);
             })
-    }, []);
+    }, [state.user.id, setPlants]);
+
+    // run this useEffect on component mount once
+    useEffect(() => {
+        dispatch({ type: 'GET_SPECIES' }); // begin our GET request
+
+        // authenticated GET to retrieve all species on the server
+        axiosWithAuth().get(`/plants/species`)
+            .then((res) => {
+                console.log(`our species:`, res);
+                const data = res.data;
+                setSpecies(data);
+
+                // finish off our successful GET request and set our species in state to our res
+                dispatch({ type: 'GOT_SPECIES', payload: data });
+            })
+            .catch((err) => {
+                // need to work on error handling
+                console.log(err);
+            })
+    }, [setSpecies]);
 
     // const { plants, setPlants } = useContext(PlantsContext);
     // const { user, setUser } = useContext(UserContext);

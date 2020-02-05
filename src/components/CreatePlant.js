@@ -25,7 +25,7 @@ function CreatePlant(props) {
             .catch((err) => {
                 console.log(err);
             })
-    }, []);
+    }, [setSpecies, species]);
 
     const id = localStorage.getItem('id');
 
@@ -93,14 +93,14 @@ function CreatePlant(props) {
                     onChange={handleChange}
                     autoComplete="off"
                 />
-                <select name="species_id" onChange={handleChange}>
+                {/* <select name="species_id" onChange={handleChange}>
                     {
                         species.map((x, idx) => {
                             // { console.log(x.id) }
                             return <option key={idx} value={x.id}>{x.common_name}</option>
                         })
                     }
-                </select>
+                </select> */}
                 {/* <input
                     type="text"
                     name="species"

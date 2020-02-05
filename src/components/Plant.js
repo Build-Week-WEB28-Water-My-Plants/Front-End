@@ -13,7 +13,7 @@ function Plant(props) {
     // const { id } = useParams();
 
     const { setPlants } = useContext(PlantsContext);
-    const { plant, plants } = props;
+    const { plant } = props;
 
     // const plantToEdit = plants.find((plant) => `${plant.id}` === id);
 
