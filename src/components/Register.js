@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
@@ -10,8 +10,6 @@ function Register(props) {
 
     let history = useHistory();
 
-    // needs to be wired up to backend endpoint for registering users
-
     // state for new user to be created
     const [newUser, setNewUser] = useState({
         username: '',
@@ -19,8 +17,8 @@ function Register(props) {
         phone_number: ''
     });
 
+    // some state for error message handling
     const [errorText, setErrorText] = useState('');
-    const [successText, setSuccessText] = useState('');
 
     // input change handler
     const handleChange = (e) => {
@@ -32,6 +30,7 @@ function Register(props) {
         });
     }
 
+    // register callback
     let cb = (user) => {
         if (newUser.username === "" ||
             newUser.password === "" ||
@@ -65,25 +64,14 @@ function Register(props) {
                     password: '',
                     phone_number: ''
                 });
-                setSuccessText('Success...');
                 history.push(`/login`);
                 // ((Should probably reset the newuser so the password gets deallocated from mem))
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
+                setErrorText("That username is already taken.");
             });
     }
-
-    // const register = (newUser) => {
-    //     axios.post(`https://water-my-plants-1.herokuapp.com/api/users/register`, newUser)
-    //         .then((res) => {
-    //             console.log(res);
-    //             history.push(`/login`);
-    //         })
-    //         .catch((err) => {
-    //             console.log(err);
-    //         })
-    // }
 
     return (
         <Container>
@@ -128,7 +116,7 @@ function Register(props) {
                 <div className="extra-options">
                     <span onClick={() => history.push(`/login`)}>Already have an account? Login</span>
                 </div>
-                {errorText && <p>{errorText}</p>}
+                {errorText && <p className="error">{errorText}</p>}
             </form>
 
         </Container >
@@ -137,6 +125,16 @@ function Register(props) {
 
 const Container = styled.div`
     color: #444444;
+
+    .error {
+        margin-top: 2rem;
+        width: 100%;
+        text-align: center;
+        color: red;
+        font-size: 1.4rem;
+        font-weight: 300;
+        letter-spacing: 0.1rem;
+    }
 
     h3 {
         font-size: 2.5rem;

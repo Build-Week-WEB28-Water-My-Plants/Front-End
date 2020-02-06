@@ -6,7 +6,6 @@ import { PlantsContext } from '../contexts';
 
 // assets
 import PlantAvatar from '../assets/PlantAvatar.svg';
-import Water from '../assets/Water.svg';
 import Drop from '../assets/Drop.svg';
 import Drops from '../assets/Drops.svg';
 import Dropss from '../assets/Dropss.svg';
@@ -18,11 +17,26 @@ function Plant(props) {
     const { setPlants } = useContext(PlantsContext);
     const { plant } = props;
     const uid = Number(localStorage.getItem('id'));
-    const species = JSON.parse(localStorage.getItem('species'));
-    const filteredSpecies = species.map((x => x));
-    const filtered = filteredSpecies.filter(sp => sp.common_name === plant.common_name);
+    const [filtered, setFiltered] = useState([]);
+    // const species = JSON.parse(localStorage.getItem('species'));
+    // const filteredSpecies = species.map((x => x));
+    // const filtered = filteredSpecies.filter(sp => sp.common_name === plant.common_name);
+    // const filtered = species.filter(sp => sp.id === plant.species_id);
 
-    console.log(`our new filtered species`, filteredSpecies);
+    useEffect(() => {
+        axiosWithAuth().get(`/plants/species`)
+            .then((res) => {
+                console.log(res);
+                setFiltered(res.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, []);
+
+    const sp = filtered.filter(s => s.common_name === plant.common_name);
+
+    // console.log(`our new filtered species`, filteredSpecies);
     console.log(`please let this work`, filtered);
 
     const [edit, setEdit] = useState(false);
@@ -80,7 +94,6 @@ function Plant(props) {
                 console.log(res);
                 setPlants(res.data);
                 history.push(`/plants`);
-                // window.location.reload();
             })
             .catch((err) => {
                 console.log(err);
@@ -117,6 +130,9 @@ function Plant(props) {
     return (
         <Card key={props.idx}>
             {/* {console.log(species)} */}
+            {console.log(plant)}
+            {/* {console.log(sp)} */}
+            {console.log(sp[0])}
             <div className="plant-info">
                 {/* {console.log(plant)} */}
                 <p>Nickname: {!edit ? (<span>{plant.nickname}</span>) : <input
@@ -160,12 +176,12 @@ function Plant(props) {
                     {/* <p>H2O Frequency: {filtered[0].h2o_frequency}</p> */}
                     {!edit && <div className="droplets">
                         <div>
-                            <h4>H2O / day</h4>
-                            {filtered[0].h2o_frequency === 1 &&
+                            <h4>h2o / day</h4>
+                            {sp[0].h2o_frequency === 1 &&
                                 <img src={Drop} alt="Droplet" />}
-                            {filtered[0].h2o_frequency === 2 &&
+                            {sp[0].h2o_frequency === 2 &&
                                 <img src={Drops} alt="Droplet x2" />}
-                            {filtered[0].h2o_frequency === 3 &&
+                            {sp[0].h2o_frequency === 3 &&
                                 <img src={Dropss} alt="Droplet x3" />}
                         </div>
                     </div>}
@@ -178,12 +194,6 @@ function Plant(props) {
                         onChange={speciesChange}
                         autoComplete="off"
                     /></p>}
-
-                    {/* {edit && <select name="species-id">
-                        {species.map((x, idx) => {
-                            return <option key={idx} value={x.id}>{x.common_name}</option>
-                        })}
-                    </select>} */}
                     {edit && <button className="confirm-edit" onClick={(e) => {
                         e.preventDefault();
                         editPlant(plant.id);
@@ -191,13 +201,6 @@ function Plant(props) {
                         setEdit(!edit);
                     }}>Finish Editing</button>}
                     <div className="plant-controls">
-
-                        {/* removing until we need to use */}
-                        {/* <div className="water-btn">
-                            <img src={Water} alt="Water Your Plant" />
-                            <span>Water</span>
-                        </div> */}
-
                         <button onClick={() => setEdit(!edit)}>Edit Plant</button>
                         <button className="delete" onClick={(e) => {
                             e.preventDefault();
@@ -210,15 +213,8 @@ function Plant(props) {
             </div>
 
             <div className="plant-avatar">
-                {/* <img src={PlantAvatar} alt={plant.nickname} /> */}
-                {/* {matchSpecies.image_url !== '' ? (
-                    <img src={matchSpecies[0].image_url} alt={plant.nickname} />
-                ) : (
-                        <img src={PlantAvatar} alt="plant.nickname" />
-                    )} */}
-                {filtered[0].image_url && <img src={filtered[0].image_url} alt="Species Image" />}
-                {!filtered[0].image_url && <img src={PlantAvatar} alt="Species Image" />}
-                {/* <img src={PlantAvatar} alt="Default plant avatar" /> */}
+                {/* {sp[0].image_url && <img src={sp[0].image_url} alt="Species" />}
+                {!sp[0].image_url && <img src={PlantAvatar} alt="Species" />} */}
             </div>
         </Card>
     )

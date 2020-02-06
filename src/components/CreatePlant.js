@@ -1,25 +1,15 @@
-import React, { useContext, useState, useEffect, useReducer } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory, Link } from 'react-router-dom';
 
-// contexts
-// import { PlantsContext } from '../contexts';
-
 // assets
-// import Start from '../assets/Start.svg';
 import Paint from '../assets/Paint.svg';
 
 function CreatePlant(props) {
 
     let history = useHistory();
-    // const { plants, setPlants, species, setSpecies } = useContext(PlantsContext);
     const uid = localStorage.getItem('id');
-
-    // console.log(uid);
-
-    // const { setPlants } = useContext(PlantsContext);
-
     const [newPlant, setNewPlant] = useState({
         nickname: '',
         species_id: Number(null),
@@ -27,8 +17,8 @@ function CreatePlant(props) {
         user_id: uid
     });
 
+    const [err, setErr] = useState('');
     const species = JSON.parse(localStorage.getItem('species'));
-    // const [plants, setPlants] = useState(JSON.parse(localStorage.getItem('plants')));
 
     const handleChange = (e) => {
         setNewPlant({
@@ -38,8 +28,12 @@ function CreatePlant(props) {
     }
 
     const createPlant = (newPlant) => {
-        // start our creation of a plant
-        // dispatch({ type: 'CREATE_REQUEST' });
+
+        if (newPlant.species_id === 0) {
+            setErr('You must select a species.');
+            return;
+        }
+
         axiosWithAuth().post(`/plants`, newPlant)
             .then((res) => {
                 console.log(res);
@@ -71,8 +65,6 @@ function CreatePlant(props) {
             <form onSubmit={(e) => {
                 e.preventDefault();
                 createPlant(newPlant);
-                // dispatch(createPlant(newPlant));
-                // console.log(newPlant);
             }}>
                 <input
                     type="text"
@@ -91,15 +83,17 @@ function CreatePlant(props) {
                     autoComplete="off"
                 />
                 <select name="species_id" onChange={handleChange}>
+                    <option selected disabled>Select a Species</option>
                     {
                         species.map((x, idx) => {
                             // { console.log(x.id) }
-                            return <option key={idx} value={Number(x.id)}>{x.common_name}</option>
+                            return <option key={idx} value={x.id}>{x.common_name}</option>
                         })
                     }
                 </select>
                 <button type="submit">Create Plant</button>
             </form>
+            {err && <p>{err}</p>}
         </Container>
     )
 }

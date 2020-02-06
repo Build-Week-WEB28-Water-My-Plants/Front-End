@@ -20,12 +20,8 @@ import UserCP from './components/UserCP';
 
 function App() {
 
-  // const uid = localStorage.getItem('id');
-
   const [plants, setPlants] = useState([]);
   const [species, setSpecies] = useState([]);
-
-  const [isLogged, setIsLogged] = useState(!!localStorage.getItem('token'));
 
   return (
     <Container>
