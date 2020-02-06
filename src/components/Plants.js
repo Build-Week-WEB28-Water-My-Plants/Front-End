@@ -136,7 +136,7 @@ function Plants(props) {
             {
                 plants.map((plant, idx) => {
                     return (
-                        <Plant key={idx} plant={plant} setPlants={setPlants} plants={plants} species={species} />
+                        <Plant key={idx} plant={plant} setPlants={setPlants} plants={plants} />
                     )
                 })
             }
