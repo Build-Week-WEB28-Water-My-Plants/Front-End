@@ -121,16 +121,9 @@ function Login(props) {
                 <p>Please login to manage and view your plants.</p>
             </div>
 
-            {/* incorrect login error message */}
-            {/* {error.status && <p className="incorrect-login">{error.message}</p>} */}
-
             <form onSubmit={(e) => {
                 e.preventDefault();
                 log(user);
-                // setError({
-                //     status: false,
-                //     message: ''
-                // });
             }}>
                 <input
                     type="text"

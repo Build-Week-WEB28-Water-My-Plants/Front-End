@@ -8,6 +8,10 @@ import { PlantsContext } from '../contexts';
 
 // assets
 import Start from '../assets/Start.svg';
+import Drop from '../assets/Drop.svg';
+import Drops from '../assets/Drops.svg';
+import Dropss from '../assets/Dropss.svg';
+
 
 function CreateSpecies(props) {
 
@@ -94,9 +98,26 @@ function CreateSpecies(props) {
                 <ol>
                     <li>Give it its common name.</li>
                     <li>Give it its scientific name.</li>
-                    <li>Designate its H2O frequency (1-3) for how many times to water it per day</li>
                     <li>Enter in an optional image URL.</li>
+                    <li>Designate its H2O frequency (1-3) for how many times to water it per day</li>
                 </ol>
+                <div className="droplets">
+                    <div>
+                        <h4>1</h4>
+                        <p>times/day</p>
+                        <img src={Drop} alt="Water once per day" />
+                    </div>
+                    <div>
+                        <h4>2</h4>
+                        <p>times/day</p>
+                        <img src={Drops} alt="Water twice per day" />
+                    </div>
+                    <div>
+                        <h4>3</h4>
+                        <p>times/day</p>
+                        <img src={Dropss} alt="Water three times per day" />
+                    </div>
+                </div>
             </div>
             <form onSubmit={(e) => {
                 e.preventDefault();
@@ -155,6 +176,38 @@ const Container = styled.div`
 
         img {
             width: 100%;
+        }
+    }
+
+    .droplets {
+        margin: 5% 0;
+        width: 100%;
+        display: flex;
+        justify-content: space-evenly;
+
+        div {
+            width: 30%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            h4 {
+                text-align: center;
+                font-size: 5rem;
+                font-weight: 900;
+                color: #444444;
+            }
+
+            p {
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            img {
+                margin-top: 2rem;
+                width: 100%;
+                height: 5rem;
+            }
         }
     }
 
@@ -247,6 +300,10 @@ const Container = styled.div`
                 margin: 2rem 0;
                 border-bottom: 1px dashed #444444;
                 padding-bottom: 1.5rem;
+
+                &:last-child {
+                    border-bottom: none;
+                }
             }
         }
 

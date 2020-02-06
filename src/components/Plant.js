@@ -7,6 +7,9 @@ import { PlantsContext } from '../contexts';
 // assets
 import PlantAvatar from '../assets/PlantAvatar.svg';
 import Water from '../assets/Water.svg';
+import Drop from '../assets/Drop.svg';
+import Drops from '../assets/Drops.svg';
+import Dropss from '../assets/Dropss.svg';
 
 function Plant(props) {
 
@@ -16,6 +19,11 @@ function Plant(props) {
     const { plant } = props;
     const uid = Number(localStorage.getItem('id'));
     const species = JSON.parse(localStorage.getItem('species'));
+    const filteredSpecies = species.map((x => x));
+    const filtered = filteredSpecies.filter(sp => sp.common_name === plant.common_name);
+
+    console.log(`our new filtered species`, filteredSpecies);
+    console.log(`please let this work`, filtered);
 
     const [edit, setEdit] = useState(false);
     const [plantToEdit, setPlantToEdit] = useState({
@@ -71,6 +79,7 @@ function Plant(props) {
 
     return (
         <Card key={props.idx}>
+            {/* {console.log(species)} */}
             <div className="plant-info">
                 {/* {console.log(plant)} */}
                 <p>Nickname: {!edit ? (<span>{plant.nickname}</span>) : <input
@@ -95,7 +104,14 @@ function Plant(props) {
                 {toggle === true && <div className="more-info">
                     <p>Common Species Name: {plant.common_name}</p>
                     <p>Scientific Name: {plant.scientific_name}</p>
-                    {/* <p>H2O Frequency: {matchSpecies[0].h2o_frequency}</p> */}
+                    {/* <p>H2O Frequency: {filtered[0].h2o_frequency}</p> */}
+                    <div className="droplets">
+                        <div>
+                            <h4>Water / day</h4>
+                            {filtered[0].h2o_frequency === 1 &&
+                                <img src={Drop} alt="Droplet" />}
+                        </div>
+                    </div>
 
                     {/* {edit && <select name="species-id">
                         {species.map((x, idx) => {
@@ -326,6 +342,42 @@ const Card = styled.div`
         &:focus {
             outline: none;
             border: 1px solid #ababab;
+        }
+    }
+
+    .droplets {
+        width: 50%;
+        display: flex;
+        justify-content: flex-start;
+        margin: 5% 0;
+
+        @media (max-width: 1200px) {
+            width: 100%;
+        }
+
+        div {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            h4 {
+                text-align: center;
+                font-size: 5rem;
+                font-weight: 900;
+                color: #fafafa;
+            }
+
+            p {
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            img {
+                margin-top: 2rem;
+                width: 100%;
+                height: 5rem;
+            }
         }
     }
 `;
