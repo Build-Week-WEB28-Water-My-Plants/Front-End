@@ -18,11 +18,11 @@ function CreateSpecies(props) {
     const [newSpecies, setNewSpecies] = useState({
         common_name: '',
         scientific_name: '',
-        h2o_frequency: 5,
+        h2o_frequency: '',
         image_url: ''
     });
 
-    // const [error, setError] = useState(false);
+    const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
@@ -34,6 +34,49 @@ function CreateSpecies(props) {
 
     const createSpecies = (newSpecies) => {
         setIsLoading(true);
+
+        if (newSpecies.common_name === '' ||
+            newSpecies.scientific_name === '' ||
+            newSpecies.h2o_frequency === '') {
+            setError(`You must enter in a common name, scientific name, and H2O frequency to proceed.`);
+            setIsLoading(false);
+            return;
+        }
+        else if (newSpecies.common_name.match(/[^a-z0-9]/gi, '')) {
+            setError('Please enter a valid common species name.');
+            setIsLoading(false);
+            return;
+        }
+        else if (newSpecies.scientific_name.match(/[^a-z0-9]/gi, '')) {
+            setError('Please enter a valid scientific name.');
+            setIsLoading(false);
+            return;
+        }
+        else if (newSpecies.h2o_frequency.match(/[^a-z0-9]/gi, '')) {
+            setError('Please enter a valid H2O frequency.');
+            setIsLoading(false);
+            return;
+        }
+        else if (newSpecies.common_name < 4 || newSpecies.common_name >= 32) {
+            setError('Please enter a valid common species name between 4 and 32 characters.');
+            setIsLoading(false);
+            return;
+        }
+        else if (newSpecies.scientific_name < 4 || newSpecies.scientific_name >= 32) {
+            setError('Please enter a valid scientific species name between 4 and 32 characters.');
+            setIsLoading(false);
+            return;
+        }
+        // else if (newSpecies.h2o_frequency !== 1 || newSpecies.h2o_frequency !== 2 || newSpecies.h2o_frequency !== 3) {
+        //     setError('H2O frequency should either be 1, 2, or 3.');
+        //     return;
+        // }
+        else if (newSpecies.h2o_frequency.match(/[^1-3]/gi, '')) {
+            setError('H2O frequency should be 1, 2, or 3.');
+            setIsLoading(false);
+            return;
+        }
+
         axiosWithAuth().post(`/plants/species`, newSpecies)
             .then((res) => {
                 console.log(res);
@@ -60,7 +103,7 @@ function CreateSpecies(props) {
                 <ol>
                     <li>Give it its common name.</li>
                     <li>Give it its scientific name.</li>
-                    <li>Designate its H2O frequency.</li>
+                    <li>Designate its H2O frequency (1-3) for how many times to water it per day</li>
                     <li>Enter in an optional image URL.</li>
                 </ol>
             </div>
@@ -91,6 +134,8 @@ function CreateSpecies(props) {
                     value={newSpecies.h2o_frequency}
                     onChange={handleChange}
                     autoComplete="off"
+                    min="1"
+                    max="3"
                 />
                 <input
                     type="url"
@@ -102,7 +147,7 @@ function CreateSpecies(props) {
                 />
                 {!isLoading && <button type="submit">Create Species</button>}
                 {isLoading && <button type="submit">Creating...</button>}
-                {/* {success && <p>Species Successfully Created</p>} */}
+                {error && <p>{error}</p>}
             </form>
         </Container>
     )

@@ -167,8 +167,7 @@ const Container = styled.div`
 
     .username {
         color: #92a0b3;
-        font-weight: 500;
-        text-shadow: 1px 0.5px 1px #677280;
+        font-weight: 700;
     }
     
     @media (max-width: 575px) {
@@ -194,8 +193,8 @@ const Container = styled.div`
     }
 
     img {
-                width: 100%;
-        }
+        width: 100%;
+    }
 
     .no-plants {
         margin-top: 10%;
@@ -275,13 +274,22 @@ const Container = styled.div`
     `;
 
 const UserControlPanel = styled.div`
-width: 100%;
+margin: 0 auto;
+width: 50%;
 display: flex;
 height: 7rem;
 align-items: center;
 justify-content: space-evenly;
 
-@media (max-width: 590px) {
+@media (max-width: 1175px) {
+    width: 70%;
+}
+
+@media (max-width: 850px) {
+    width: 80%;
+}
+
+@media (max-width: 715px) {
     flex-direction: column;
     height: 8rem;
 }

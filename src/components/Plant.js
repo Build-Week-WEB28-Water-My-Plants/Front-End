@@ -21,11 +21,12 @@ function Plant(props) {
     const [plantToEdit, setPlantToEdit] = useState({
         nickname: '',
         location: '',
-        // scientific_name: '',
-        // common_species: '',
-        // h2o_frequency: '',
         user_id: uid
-    })
+    });
+
+    const matchSpecies = species.filter(sp => sp.common_name === plant.common_name);
+
+    console.log(`OUR MATCHED SPECIES`, matchSpecies);
 
     const handleChange = (e) => {
         setPlantToEdit({
@@ -33,8 +34,6 @@ function Plant(props) {
             [e.target.name]: e.target.value
         });
     }
-
-    // const plantToEdit = plants.find((plant) => `${plant.id}` === id);
 
     const [toggle, setToggle] = useState(false);
 
@@ -58,7 +57,6 @@ function Plant(props) {
     }
 
     const editPlant = (id) => {
-        // history.push(`/plants/${id}`);
         axiosWithAuth().put(`/plants/${id}`, plantToEdit)
             .then((res) => {
                 console.log(res);
@@ -93,10 +91,12 @@ function Plant(props) {
                 />}</p>
 
                 {/* make toggleable */}
+                {/* {console.log(`THIS IS OUR PLANT`, plant)} */}
                 {toggle === true && <div className="more-info">
-                    <p>Common Species Name: {plant.common_species}</p>
+                    <p>Common Species Name: {plant.common_name}</p>
                     <p>Scientific Name: {plant.scientific_name}</p>
-                    <p>H2O Frequency: {plant.h2o_frequency}</p>
+                    <p>H2O Frequency: {matchSpecies[0].h2o_frequency}</p>
+
                     {edit && <select name="species-id">
                         {species.map((x, idx) => {
                             return <option key={idx} value={x.id}>{x.common_name}</option>
@@ -265,7 +265,7 @@ const Card = styled.div`
         img {
             width: 100%;
             height: 20rem;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         @media (max-width: 1080px) {
