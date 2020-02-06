@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useReducer } from 'react';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
@@ -19,6 +19,9 @@ function Register(props) {
         phone_number: ''
     });
 
+    const [errorText, setErrorText] = useState('');
+    const [successText, setSuccessText] = useState('');
+
     // input change handler
     const handleChange = (e) => {
 
@@ -29,16 +32,58 @@ function Register(props) {
         });
     }
 
-    const register = (newUser) => {
-        axios.post(`https://water-my-plants-1.herokuapp.com/api/users/register`, newUser)
+    let cb = (user) => {
+        if (newUser.username === "" ||
+            newUser.password === "" ||
+            newUser.phone_number === "") {
+            setErrorText("Please fill out all fields!");
+        }
+        else if (newUser.username.length < 4 || newUser.username.length > 12) {
+            setErrorText("Your username must be at least 4 characters, and no longer than 12.");
+            return;
+        }
+        else if (newUser.username.match(/[^a-z0-9]/gi, '')) {
+            setErrorText("Your username can only contain letters and numbers.");
+            return;
+        }
+        else if (newUser.password.length < 4 || newUser.password.length >= 32) {
+            setErrorText("Your password must be between 4 and 32 characters.")
+            return;
+        }
+        else if (newUser.phone_number.match(/[^0-9]/gi, '') || newUser.phone_number.length !== 10) {
+            setErrorText("Please enter a valid 10 digit phone number.");
+            return;
+        }
+
+        axios.post("https://water-my-plants-1.herokuapp.com/api/users/register", user)
             .then((res) => {
+                //response.data["id"]
+                //response.data["username"]
                 console.log(res);
+                setNewUser({
+                    username: '',
+                    password: '',
+                    phone_number: ''
+                });
+                setSuccessText('Success...');
                 history.push(`/login`);
+                // ((Should probably reset the newuser so the password gets deallocated from mem))
             })
             .catch((err) => {
-                console.log(err);
-            })
+                console.log(err)
+            });
     }
+
+    // const register = (newUser) => {
+    //     axios.post(`https://water-my-plants-1.herokuapp.com/api/users/register`, newUser)
+    //         .then((res) => {
+    //             console.log(res);
+    //             history.push(`/login`);
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         })
+    // }
 
     return (
         <Container>
@@ -52,7 +97,8 @@ function Register(props) {
             {/* Register Form */}
             <form onSubmit={(e) => {
                 e.preventDefault();
-                register(newUser);
+                // register(newUser);
+                cb(newUser);
             }}>
                 <input
                     type="text"
@@ -82,9 +128,10 @@ function Register(props) {
                 <div className="extra-options">
                     <span onClick={() => history.push(`/login`)}>Already have an account? Login</span>
                 </div>
+                {errorText && <p>{errorText}</p>}
             </form>
 
-        </Container>
+        </Container >
     )
 }
 

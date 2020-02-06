@@ -5,22 +5,45 @@ import { useHistory } from 'react-router-dom';
 import { PlantsContext } from '../contexts';
 
 // assets
-// import PlantAvatar from '../assets/PlantAvatar.svg';
+import PlantAvatar from '../assets/PlantAvatar.svg';
 import Water from '../assets/Water.svg';
+import Drop from '../assets/Drop.svg';
+import Drops from '../assets/Drops.svg';
+import Dropss from '../assets/Dropss.svg';
 
 function Plant(props) {
 
-    // const { id } = useParams();
+    let history = useHistory();
 
     const { setPlants } = useContext(PlantsContext);
     const { plant } = props;
+    const uid = Number(localStorage.getItem('id'));
+    const species = JSON.parse(localStorage.getItem('species'));
+    const filteredSpecies = species.map((x => x));
+    const filtered = filteredSpecies.filter(sp => sp.common_name === plant.common_name);
 
-    // const plantToEdit = plants.find((plant) => `${plant.id}` === id);
+    console.log(`our new filtered species`, filteredSpecies);
+    console.log(`please let this work`, filtered);
+
+    const [edit, setEdit] = useState(false);
+    const [plantToEdit, setPlantToEdit] = useState({
+        nickname: '',
+        location: '',
+        user_id: uid
+    });
+
+    // const matchSpecies = species.filter(sp => sp.common_name === plant.common_name);
+
+    // console.log(`OUR MATCHED SPECIES`, matchSpecies);
+
+    const handleChange = (e) => {
+        setPlantToEdit({
+            ...plantToEdit,
+            [e.target.name]: e.target.value
+        });
+    }
 
     const [toggle, setToggle] = useState(false);
-
-    let history = useHistory();
-    const uid = localStorage.getItem('id');
 
     const deletePlant = (id) => {
         axiosWithAuth().delete(`/plants/${id}`)
@@ -29,8 +52,8 @@ function Plant(props) {
                 axiosWithAuth().get(`/plants/user/${uid}`)
                     .then((res) => {
                         console.log(res);
-                        // setPlants(res.data);
-                        // history.push(`/plants`);
+                        setPlants(res.data);
+                        history.push(`/plants`);
                     })
                     .catch((err) => {
                         console.log(err);
@@ -42,39 +65,91 @@ function Plant(props) {
     }
 
     const editPlant = (id) => {
-        history.push(`/plants/${id}`);
+        axiosWithAuth().put(`/plants/${id}`, plantToEdit)
+            .then((res) => {
+                console.log(res);
+                setPlants(res.data);
+                history.push(`/plants`);
+                // window.location.reload();
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     }
 
     return (
         <Card key={props.idx}>
+            {/* {console.log(species)} */}
             <div className="plant-info">
                 {/* {console.log(plant)} */}
-                <p>Nickname: {plant.nickname}</p>
-                <p>Location: {plant.location}</p>
+                <p>Nickname: {!edit ? (<span>{plant.nickname}</span>) : <input
+                    type="text"
+                    name="nickname"
+                    placeholder="New Nickname"
+                    value={plantToEdit.nickname}
+                    onChange={handleChange}
+                    autoComplete="off"
+                />}</p>
+                <p>Location: {!edit ? (<span>{plant.location}</span>) : <input
+                    type="text"
+                    name="location"
+                    placeholder="New Location"
+                    value={plantToEdit.location}
+                    onChange={handleChange}
+                    autoComplete="off"
+                />}</p>
 
                 {/* make toggleable */}
+                {/* {console.log(`THIS IS OUR PLANT`, plant)} */}
                 {toggle === true && <div className="more-info">
                     <p>Common Species Name: {plant.common_name}</p>
-                    <p>Scientific Species Name: {plant.scientific_name}</p>
-                    <p>H2O Frequency: {plant.h2o_frequency}</p>
+                    <p>Scientific Name: {plant.scientific_name}</p>
+                    {/* <p>H2O Frequency: {filtered[0].h2o_frequency}</p> */}
+                    <div className="droplets">
+                        <div>
+                            <h4>Water / day</h4>
+                            {filtered[0].h2o_frequency === 1 &&
+                                <img src={Drop} alt="Droplet" />}
+                        </div>
+                    </div>
+
+                    {/* {edit && <select name="species-id">
+                        {species.map((x, idx) => {
+                            return <option key={idx} value={x.id}>{x.common_name}</option>
+                        })}
+                    </select>} */}
+                    {edit && <button onClick={(e) => {
+                        e.preventDefault();
+                        editPlant(plant.id);
+                        setEdit(!edit);
+                    }}>Finish Editing</button>}
                     <div className="plant-controls">
-                        <div className="water-btn">
+
+                        {/* removing until we need to use */}
+                        {/* <div className="water-btn">
                             <img src={Water} alt="Water Your Plant" />
                             <span>Water</span>
-                        </div>
-                        <button onClick={() => editPlant(plant.id)}>Edit Plant</button>
+                        </div> */}
+
+                        <button onClick={() => setEdit(!edit)}>Edit Plant</button>
                         <button className="delete" onClick={(e) => {
                             e.preventDefault();
                             deletePlant(plant.id);
                         }}>Delete Plant</button>
-                        {toggle === true && <p onClick={() => setToggle(!toggle)}>Collapse information...</p>}
+                        {toggle === true && <div className="collapse" onClick={() => setToggle(!toggle)}>Collapse information...</div>}
                     </div>
                 </div>}
                 {toggle === false && <div className="view-more" onClick={() => setToggle(!toggle)}>View more information...</div>}
             </div>
 
             <div className="plant-avatar">
-                {plant.image_url && <img src={plant.image_url} alt={plant.nickname} />}
+                {/* <img src={PlantAvatar} alt={plant.nickname} /> */}
+                {/* {matchSpecies.image_url !== '' ? (
+                    <img src={matchSpecies[0].image_url} alt={plant.nickname} />
+                ) : (
+                        <img src={PlantAvatar} alt="plant.nickname" />
+                    )} */}
+                <img src={PlantAvatar} alt="Default plant avatar" />
             </div>
         </Card>
     )
@@ -114,11 +189,11 @@ const Card = styled.div`
             }
     
             .plant-controls {
-                width: 45rem;
+                width: 60rem;
                 margin-top: 5rem;
                 display: flex;
                 justify-content: space-evenly;
-                // border: 1px solid red;
+                align-items: center;
 
                 @media (max-width: 1080px) {
                     flex-direction: column;
@@ -131,6 +206,8 @@ const Card = styled.div`
 
                 @media (max-width: 720px) {
                     align-items: center;
+                    width: 100%;
+                    height: 15rem;
                 }
                 
                 button {
@@ -143,11 +220,16 @@ const Card = styled.div`
                     font-weight: 300;
                     letter-spacing: 0.1rem;
                     transition: all 300ms;
+                    box-shadow: 0px 2px 5px -5px;
     
                     &:hover {
                         transition: opacity 300ms;
                         opacity: 0.9;
                         cursor: pointer;
+                    }
+
+                    @media (max-width: 720px) {
+                        margin: 1rem 0;
                     }
                 }
     
@@ -167,6 +249,11 @@ const Card = styled.div`
                     border-radius: 0.3rem;
                     transition: all 300ms;
                     height: 3rem;
+                    box-shadow: 0px 2px 5px -5px;
+
+                    @media (max-width: 720px) {
+                        margin: 1rem 0;
+                    }
 
                     &:hover {
                         transition: opacity 300ms;
@@ -199,7 +286,7 @@ const Card = styled.div`
         img {
             width: 100%;
             height: 20rem;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         @media (max-width: 1080px) {
@@ -211,19 +298,85 @@ const Card = styled.div`
         }
     }
 
-    .view-more {
+    .view-more, .collapse {
+        margin: 1rem 0;
         display: flex;
         justify-content: center;
+        align-items: center;
         width: 20rem;
         height: 3rem;
         border-radius: 0.3rem;
-        color: #d1ffd6;
+        background: #d1ffd6;
+        color: #444444;
+        font-weight: 300;
+        letter-spacing: 0.1rem;
+        transition: all 300ms;
+        font-size: 1.6rem;
+
+        &:hover {
+            transition: opacity 300ms;
+            opacity: 0.8;
+            cursor: pointer;
+        }
 
         .icon {
             width: 25%;
 
             img {
                 width: 100%;
+            }
+        }
+    }
+
+    input {
+        margin: 0.5rem 0;
+        width: 20rem;
+        height: 3.5rem;
+        background: #bfbfbf;
+        border: none;
+        border-radius: 0.3rem;
+        padding: 0.5rem 0.5rem 0.5rem 1rem;
+        font-size: 1.2rem;
+        font-weight: 300;
+        letter-spacing: 0.1rem;
+        &:focus {
+            outline: none;
+            border: 1px solid #ababab;
+        }
+    }
+
+    .droplets {
+        width: 50%;
+        display: flex;
+        justify-content: flex-start;
+        margin: 5% 0;
+
+        @media (max-width: 1200px) {
+            width: 100%;
+        }
+
+        div {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            h4 {
+                text-align: center;
+                font-size: 5rem;
+                font-weight: 900;
+                color: #fafafa;
+            }
+
+            p {
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+
+            img {
+                margin-top: 2rem;
+                width: 100%;
+                height: 5rem;
             }
         }
     }

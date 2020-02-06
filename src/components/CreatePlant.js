@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 
 // contexts
 // import { PlantsContext } from '../contexts';
@@ -18,15 +18,17 @@ function CreatePlant(props) {
 
     // console.log(uid);
 
+    // const { setPlants } = useContext(PlantsContext);
+
     const [newPlant, setNewPlant] = useState({
         nickname: '',
-        species_id: '',
+        species_id: Number(null),
         location: '',
         user_id: uid
     });
 
-    const [species, setSpecies] = useState(JSON.parse(localStorage.getItem('species')));
-    const [plants, setPlants] = useState(JSON.parse(localStorage.getItem('plants')));
+    const species = JSON.parse(localStorage.getItem('species'));
+    // const [plants, setPlants] = useState(JSON.parse(localStorage.getItem('plants')));
 
     const handleChange = (e) => {
         setNewPlant({
@@ -63,6 +65,7 @@ function CreatePlant(props) {
                         <li>Identify its species</li>
                         {/* <li>Set how many times it needs to be watered per day</li> */}
                     </ol>
+                    <p className="note">Note: If there are no species, you'll need to <Link to="/create-species">create one</Link></p>
                 </div>
             </div>
             <form onSubmit={(e) => {
@@ -91,34 +94,10 @@ function CreatePlant(props) {
                     {
                         species.map((x, idx) => {
                             // { console.log(x.id) }
-                            return <option key={idx} value={x.id}>{x.common_name}</option>
+                            return <option key={idx} value={Number(x.id)}>{x.common_name}</option>
                         })
                     }
                 </select>
-                {/* <input
-                    type="text"
-                    name="species"
-                    placeholder="Species"
-                    value={newPlant.species}
-                    onChange={handleChange}
-                    autoComplete="off"
-                /> */}
-                {/* <input
-                    type="text"
-                    name="h2oFrequency"
-                    placeholder="Water how many times a day?"
-                    value={newPlant.h2oFrequency}
-                    onChange={handleChange}
-                    autoComplete="off"
-                /> */}
-                {/* <input
-                    type="url"
-                    name="image"
-                    placeholder="Enter image URL"
-                    value={newPlant.image}
-                    onChange={handleChange}
-                    autoComplete="off"
-                /> */}
                 <button type="submit">Create Plant</button>
             </form>
         </Container>
@@ -129,6 +108,15 @@ const Container = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        .note {
+            a {
+                color: #d1ffd6;
+                font-weight: 900;
+                text-decoration: none;
+                padding-bottom: 0.5rem;
+            }
+        }
 
     form {
         display: flex;
