@@ -73,9 +73,10 @@ h3 {
         letter-spacing: 0.1rem;
         padding-bottom: 1rem;
         border-bottom: 1px dotted #444444;
-        border-bottom-length: 150px;
+        border-bottom-length: 250px;
         color: #2b2b2b;
         text-align: center;
+        
 }
 img {
     display: block;
@@ -91,9 +92,11 @@ const DivS = styled.div`
 p {
         font-size: 1.6rem;
         font-weight: 500;
-        margin: 2rem 0;
+        margin: 2rem 0 6rem 0;
         color: #2b2b2b;
         align-content: center;
+        text-align: center;
+        
 }
 `
 
