@@ -4,53 +4,33 @@ import { Link } from 'react-router-dom';
 
 function Header(props) {
 
-    // const [isLogged, setIsLogged] = useState(false);
+    const [isLogged, setIsLogged] = useState(false);
 
-    // useEffect(() => {
-    //     !!localStorage.getItem('token') ? setIsLogged(true) : setIsLogged(false);
-    // }, []);
-
-    // let history = useHistory();
+    useEffect(() => {
+        const token = !!localStorage.getItem('token');
+        if (token) {
+            setIsLogged(true);
+        }
+    }, []);
 
     return (
         <Container>
-            {/* {console.log(isLogged)} */}
             <h1>PlantWise</h1>
 
-            {/* navigation menu / user control panel with some conditional rendering. will need to change with backend auth probably */}
             <nav className="user-cp">
-                {/* <Link to="/">Home</Link>
-                {!isLogged &&
-                    <Link to="/register">Register</Link>}
-                {!isLogged &&
-                    <Link to="/login">Login</Link>}
-                {isLogged &&
-                    <Link to="/plants">Plants</Link>}
-                {isLogged &&
-                    <Link to="/create">Create Plant</Link>}
-                {isLogged &&
-                    <Link to="/create-species">Create Species</Link>}
-                {isLogged &&
-                    <span className="user-cp" onClick={() => {
-                        localStorage.clear();
-                        window.location.reload();
-                    }}>Logout</span>} */}
-                <Link to="/">Home</Link>
                 {!localStorage.getItem('token') &&
                     <Link to="/register">Register</Link>}
                 {!localStorage.getItem('token') &&
                     <Link to="/login">Login</Link>}
                 {localStorage.getItem('token') &&
-                    <Link to="/plants">Plants</Link>}
-                {localStorage.getItem('token') &&
-                    <Link to="/create">Create Plant</Link>}
-                {localStorage.getItem('token') &&
-                    <Link to="/create-species">Create Species</Link>}
+                    <Link to="/plants">Dashboard</Link>}
                 {localStorage.getItem('token') &&
                     <span className="user-cp" onClick={() => {
                         localStorage.clear();
                         window.location.reload();
                     }}>Logout</span>}
+
+                {console.log(isLogged)}
             </nav>
         </Container>
     )

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
+import { useHistory } from 'react-router-dom';
 
 // contexts
 // import { UserContext } from '../contexts';
@@ -13,11 +14,14 @@ function UserCP(props) {
     // const { user, setUser } = useContext(UserContext);
     const name = localStorage.getItem('username');
     const id = Number(localStorage.getItem('id'));
+    let history = useHistory();
 
     const [updatedUser, setUpdatedUser] = useState({
         password: '',
         phone_number: ''
     })
+
+    const [err, setErr] = useState('');
 
     const handleChange = (e) => {
         setUpdatedUser({
@@ -27,9 +31,24 @@ function UserCP(props) {
     }
 
     const updateAccount = (user) => {
+
+        if (user.phone_number === '' || user.password === '') {
+            setErr('Please fill out both of the fields.');
+            return;
+        }
+        else if (user.phone_number.length !== 10 || user.phone_number.match(/[^0-9]/gi, '')) {
+            setErr('Please enter a valid phone number.');
+            return;
+        }
+        else if (user.password.length < 4 || user.password.length >= 32) {
+            setErr('Your password must be between 4 and 32 characters.');
+            return;
+        }
+
         axiosWithAuth().put(`/users/${id}`, user)
             .then((res) => {
                 console.log(res);
+                history.push(`/plants`);
             })
             .catch((err) => {
                 console.log(err);
@@ -72,12 +91,23 @@ function UserCP(props) {
                 />
                 <button type="submit">Update Account</button>
             </form>
+            {err && <div className="error">{err}</div>}
         </Container>
     )
 }
 
 const Container = styled.div`
     width: 60%;
+
+    .error {
+        margin-top: 2rem;
+        width: 100%;
+        text-align: center;
+        color: red;
+        font-size: 1.4rem;
+        font-weight: 300;
+        letter-spacing: 0.1rem;
+    }
 
     h3 {
         font-size: 3rem;
