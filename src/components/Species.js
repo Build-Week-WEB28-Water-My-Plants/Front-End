@@ -74,7 +74,7 @@ h3 {
         padding-bottom: 1rem;
         border-bottom: 1px dotted #444444;
         border-bottom-length: 250px;
-        color: #2b2b2b;
+        color: #1e8b94;
         text-align: center;
         
 }
