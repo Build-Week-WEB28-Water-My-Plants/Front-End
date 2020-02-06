@@ -23,7 +23,6 @@ function CreateSpecies(props) {
     });
 
     const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
 
     const handleChange = (e) => {
         setNewSpecies({
@@ -33,38 +32,31 @@ function CreateSpecies(props) {
     }
 
     const createSpecies = (newSpecies) => {
-        setIsLoading(true);
 
         if (newSpecies.common_name === '' ||
             newSpecies.scientific_name === '' ||
             newSpecies.h2o_frequency === '') {
             setError(`You must enter in a common name, scientific name, and H2O frequency to proceed.`);
-            setIsLoading(false);
             return;
         }
-        else if (newSpecies.common_name.match(/[^a-z0-9]/gi, '')) {
+        else if (newSpecies.common_name.match(/[^a-z0-9 ]/gi, '')) {
             setError('Please enter a valid common species name.');
-            setIsLoading(false);
             return;
         }
-        else if (newSpecies.scientific_name.match(/[^a-z0-9]/gi, '')) {
+        else if (newSpecies.scientific_name.match(/[^a-z0-9 ]/gi, '')) {
             setError('Please enter a valid scientific name.');
-            setIsLoading(false);
             return;
         }
         else if (newSpecies.h2o_frequency.match(/[^a-z0-9]/gi, '')) {
             setError('Please enter a valid H2O frequency.');
-            setIsLoading(false);
             return;
         }
-        else if (newSpecies.common_name < 4 || newSpecies.common_name >= 32) {
+        else if (newSpecies.common_name.length < 4 || newSpecies.common_name.length >= 32) {
             setError('Please enter a valid common species name between 4 and 32 characters.');
-            setIsLoading(false);
             return;
         }
-        else if (newSpecies.scientific_name < 4 || newSpecies.scientific_name >= 32) {
+        else if (newSpecies.scientific_name.length < 4 || newSpecies.scientific_name.length >= 32) {
             setError('Please enter a valid scientific species name between 4 and 32 characters.');
-            setIsLoading(false);
             return;
         }
         // else if (newSpecies.h2o_frequency !== 1 || newSpecies.h2o_frequency !== 2 || newSpecies.h2o_frequency !== 3) {
@@ -73,7 +65,6 @@ function CreateSpecies(props) {
         // }
         else if (newSpecies.h2o_frequency.match(/[^1-3]/gi, '')) {
             setError('H2O frequency should be 1, 2, or 3.');
-            setIsLoading(false);
             return;
         }
 
@@ -84,7 +75,7 @@ function CreateSpecies(props) {
                     ...species,
                     newSpecies
                 });
-                setIsLoading(false);
+                // setIsLoading(false);
                 history.push(`/plants`);
             })
             .catch((err) => {
@@ -145,8 +136,7 @@ function CreateSpecies(props) {
                     onChange={handleChange}
                     autoComplete="off"
                 />
-                {!isLoading && <button type="submit">Create Species</button>}
-                {isLoading && <button type="submit">Creating...</button>}
+                <button type="submit">Create Species</button>
                 {error && <p>{error}</p>}
             </form>
         </Container>

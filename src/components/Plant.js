@@ -26,7 +26,7 @@ function Plant(props) {
 
     const matchSpecies = species.filter(sp => sp.common_name === plant.common_name);
 
-    console.log(`OUR MATCHED SPECIES`, matchSpecies);
+    // console.log(`OUR MATCHED SPECIES`, matchSpecies);
 
     const handleChange = (e) => {
         setPlantToEdit({
@@ -97,15 +97,15 @@ function Plant(props) {
                     <p>Scientific Name: {plant.scientific_name}</p>
                     <p>H2O Frequency: {matchSpecies[0].h2o_frequency}</p>
 
-                    {edit && <select name="species-id">
+                    {/* {edit && <select name="species-id">
                         {species.map((x, idx) => {
                             return <option key={idx} value={x.id}>{x.common_name}</option>
                         })}
-                    </select>}
+                    </select>} */}
                     {edit && <button onClick={(e) => {
                         e.preventDefault();
                         editPlant(plant.id);
-                        setEdit(false);
+                        setEdit(!edit);
                     }}>Finish Editing</button>}
                     <div className="plant-controls">
 
@@ -127,8 +127,12 @@ function Plant(props) {
             </div>
 
             <div className="plant-avatar">
-                <img src={PlantAvatar} alt={plant.nickname} />
-                {/* <img src={plant.image_url} alt={plant.nickname} /> */}
+                {/* <img src={PlantAvatar} alt={plant.nickname} /> */}
+                {matchSpecies.image_url !== '' ? (
+                    <img src={matchSpecies[0].image_url} alt={plant.nickname} />
+                ) : (
+                        <img src={PlantAvatar} alt="plant.nickname" />
+                    )}
             </div>
         </Card>
     )
