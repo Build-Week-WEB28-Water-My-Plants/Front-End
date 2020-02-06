@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { PlantsContext } from '../contexts';
 
 // assets
-// import PlantAvatar from '../assets/PlantAvatar.svg';
+import PlantAvatar from '../assets/PlantAvatar.svg';
 import Water from '../assets/Water.svg';
 
 function Plant(props) {
@@ -15,6 +15,7 @@ function Plant(props) {
     const { setPlants } = useContext(PlantsContext);
     const { plant } = props;
     const uid = Number(localStorage.getItem('id'));
+    const species = JSON.parse(localStorage.getItem('species'));
 
     const [edit, setEdit] = useState(false);
     const [plantToEdit, setPlantToEdit] = useState({
@@ -93,40 +94,27 @@ function Plant(props) {
 
                 {/* make toggleable */}
                 {toggle === true && <div className="more-info">
-                    {/* <p>Common Species Name: {!edit ? (<span>{plant.common_name}</span>) : <input
-                        type="text"
-                        name="common_species"
-                        placeholder="New Common Species Name"
-                        value={plantToEdit.common_species}
-                        onChange={handleChange}
-                        autoComplete="off"
-                    />}</p>
-                    <p>Scientific Name: {!edit ? (<span>{plant.scientific_name}</span>) : <input
-                        type="text"
-                        name="scientific_name"
-                        placeholder="New Scientific Name"
-                        value={plantToEdit.scientific_name}
-                        onChange={handleChange}
-                        autoComplete="off"
-                    />}</p>
-                    <p>H2O Frequency: {!edit ? (<span>{plant.h2o_frequency}</span>) : <input
-                        type="number"
-                        name="h2o_frequency"
-                        placeholder="New H2O Frequency"
-                        value={plantToEdit.h2o_frequency}
-                        onChange={handleChange}
-                        autoComplete="off"
-                    />}</p> */}
+                    <p>Common Species Name: {plant.common_species}</p>
+                    <p>Scientific Name: {plant.scientific_name}</p>
+                    <p>H2O Frequency: {plant.h2o_frequency}</p>
+                    {edit && <select name="species-id">
+                        {species.map((x, idx) => {
+                            return <option key={idx} value={x.id}>{x.common_name}</option>
+                        })}
+                    </select>}
                     {edit && <button onClick={(e) => {
                         e.preventDefault();
                         editPlant(plant.id);
                         setEdit(false);
                     }}>Finish Editing</button>}
                     <div className="plant-controls">
-                        <div className="water-btn">
+
+                        {/* removing until we need to use */}
+                        {/* <div className="water-btn">
                             <img src={Water} alt="Water Your Plant" />
                             <span>Water</span>
-                        </div>
+                        </div> */}
+
                         <button onClick={() => setEdit(!edit)}>Edit Plant</button>
                         <button className="delete" onClick={(e) => {
                             e.preventDefault();
@@ -139,7 +127,8 @@ function Plant(props) {
             </div>
 
             <div className="plant-avatar">
-                {plant.image_url && <img src={plant.image_url} alt={plant.nickname} />}
+                <img src={PlantAvatar} alt={plant.nickname} />
+                {/* <img src={plant.image_url} alt={plant.nickname} /> */}
             </div>
         </Card>
     )
@@ -179,13 +168,11 @@ const Card = styled.div`
             }
     
             .plant-controls {
-                border: 1px solid red;
                 width: 60rem;
                 margin-top: 5rem;
                 display: flex;
                 justify-content: space-evenly;
                 align-items: center;
-                // border: 1px solid red;
 
                 @media (max-width: 1080px) {
                     flex-direction: column;
@@ -198,6 +185,8 @@ const Card = styled.div`
 
                 @media (max-width: 720px) {
                     align-items: center;
+                    width: 100%;
+                    height: 15rem;
                 }
                 
                 button {
@@ -210,11 +199,16 @@ const Card = styled.div`
                     font-weight: 300;
                     letter-spacing: 0.1rem;
                     transition: all 300ms;
+                    box-shadow: 0px 2px 5px -5px;
     
                     &:hover {
                         transition: opacity 300ms;
                         opacity: 0.9;
                         cursor: pointer;
+                    }
+
+                    @media (max-width: 720px) {
+                        margin: 1rem 0;
                     }
                 }
     
@@ -234,6 +228,11 @@ const Card = styled.div`
                     border-radius: 0.3rem;
                     transition: all 300ms;
                     height: 3rem;
+                    box-shadow: 0px 2px 5px -5px;
+
+                    @media (max-width: 720px) {
+                        margin: 1rem 0;
+                    }
 
                     &:hover {
                         transition: opacity 300ms;
@@ -291,7 +290,7 @@ const Card = styled.div`
         font-weight: 300;
         letter-spacing: 0.1rem;
         transition: all 300ms;
-        font-size: 1.4rem;
+        font-size: 1.6rem;
 
         &:hover {
             transition: opacity 300ms;
@@ -305,6 +304,23 @@ const Card = styled.div`
             img {
                 width: 100%;
             }
+        }
+    }
+
+    input {
+        margin: 0.5rem 0;
+        width: 20rem;
+        height: 3.5rem;
+        background: #bfbfbf;
+        border: none;
+        border-radius: 0.3rem;
+        padding: 0.5rem 0.5rem 0.5rem 1rem;
+        font-size: 1.2rem;
+        font-weight: 300;
+        letter-spacing: 0.1rem;
+        &:focus {
+            outline: none;
+            border: 1px solid #ababab;
         }
     }
 `;
