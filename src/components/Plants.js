@@ -136,11 +136,10 @@ function Plants(props) {
             {
                 plants.map((plant, idx) => {
                     return (
-                        <Plant key={idx} plant={plant} setPlants={setPlants} plants={plants} />
+                        <Plant key={idx} plant={plant} setPlants={setPlants} plants={plants} species={species} />
                     )
                 })
             }
-            {/* <PrivateRoute exact path="/plants/:id" render={props => <Edit {...props} plants={plants} />} /> */}
         </Container>
     )
 }
