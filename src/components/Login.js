@@ -20,6 +20,8 @@ function Login(props) {
         phone_number: ''
     });
 
+    const [err, setErr] = useState('');
+
     const initialState = {
         isLogged: false,
         isLoading: false,
@@ -69,6 +71,24 @@ function Login(props) {
     // login function for form submit
     const log = (user) => {
         dispatch({ type: 'LOGIN_REQUEST' });
+
+        if (user.username === '' || user.password === '') {
+            setErr('You must fill out both fields.');
+            return;
+        }
+        else if (user.username.length < 4 || user.username.length >= 32) {
+            setErr('Your username must be between 4 and 32 characters.');
+            return;
+        }
+        else if (user.username.match(/[^a-z0-9]/gi, '')) {
+            setErr('Please enter a valid username');
+            return;
+        }
+        else if (user.password.length < 4 || user.password.length >= 32) {
+            setErr('Your password must be between 4 and 32 characters.');
+            return;
+        }
+
         axios.post(`https://water-my-plants-1.herokuapp.com/api/users/login`, user)
             .then((res) => {
                 const { token, id } = res.data;
@@ -83,26 +103,14 @@ function Login(props) {
                 localStorage.setItem('id', id);
                 localStorage.setItem('username', user.username);
                 dispatch({ type: 'LOGIN_SUCCESS', payload: data })
-                // setIsLogged(true);
-                // setIsLoading(false);
-                // setError({
-                //     status: false,
-                //     message: ''
-                // });
-                // history.push(`/plants`);
             })
             .catch((err) => {
-                console.log(err);
-                // console.log(err.response.data.error);
-                // setError({
-                //     status: true,
-                //     message: 'Incorrect login. Try again.'
-                // });
-                // setUser({
-                //     ...user,
-                //     username: '',
-                //     password: ''
-                // });
+                // console.log(err.message);
+                setErr('Invalid credentials.');
+                setUser({
+                    username: '',
+                    password: ''
+                });
             })
     }
 
@@ -141,11 +149,14 @@ function Login(props) {
                     autoComplete="off"
                 />
                 <button type="submit">Login</button>
+
                 {/* <div className="extra-options">
                     <span onClick={() => history.push(`/register`)}>Register</span>
                     <span>Forgot Password</span>
                 </div> */}
             </form>
+
+            {err && <div className="error">{err}</div>}
 
             <div className="svg-banner">
                 <img src={View} alt="Woman looking at nature" />
@@ -160,6 +171,16 @@ const FormContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .error {
+        margin-bottom: 5rem;
+        width: 100%;
+        text-align: center;
+        color: red;
+        font-size: 1.4rem;
+        font-weight: 300;
+        letter-spacing: 0.1rem;
+    }
     .svg-banner {
         display: flex;
         justify-content: center;
@@ -241,7 +262,7 @@ const FormContainer = styled.div`
     button {
         width: 20rem;
         height: 3.5rem;
-        margin: 1rem 0;
+        margin: 1rem 0 0;
         background: #d1ffd6;
         border: none;
         border-radius: 0.3rem;

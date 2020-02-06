@@ -4,6 +4,15 @@ import { Link } from 'react-router-dom';
 
 function Header(props) {
 
+    const [isLogged, setIsLogged] = useState(false);
+
+    useEffect(() => {
+        const token = !!localStorage.getItem('token');
+        if (token) {
+            setIsLogged(true);
+        }
+    }, []);
+
     return (
         <Container>
             <h1>PlantWise</h1>
@@ -20,6 +29,8 @@ function Header(props) {
                         localStorage.clear();
                         window.location.reload();
                     }}>Logout</span>}
+
+                {console.log(isLogged)}
             </nav>
         </Container>
     )
