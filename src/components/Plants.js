@@ -118,6 +118,10 @@ function Plants(props) {
                     e.preventDefault();
                     history.push(`/create`);
                 }}>Create Plant</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    history.push(`/usercp`);
+                }}>Account Settings</button>
             </UserControlPanel>
             {console.log(`was this success?`, plants, species)}
             <h3>Welcome to your Plant Dashboard, <span className="username">{localStorage.getItem('username')}</span>.</h3>
@@ -275,23 +279,27 @@ const Container = styled.div`
 
 const UserControlPanel = styled.div`
 margin: 0 auto;
-width: 50%;
+width: 70%;
 display: flex;
 height: 7rem;
 align-items: center;
 justify-content: space-evenly;
 
-@media (max-width: 1175px) {
-    width: 70%;
+@media (max-width: 1208px) {
+    width: 80%;
 }
 
 @media (max-width: 850px) {
     width: 80%;
 }
 
-@media (max-width: 715px) {
+@media (max-width: 1050px) {
+    width: 90%;
+}
+
+@media (max-width: 930px) {
     flex-direction: column;
-    height: 8rem;
+    height: 15rem;
 }
 
 button {
