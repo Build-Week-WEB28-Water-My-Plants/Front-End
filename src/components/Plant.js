@@ -24,7 +24,7 @@ function Plant(props) {
         user_id: uid
     });
 
-    const matchSpecies = species.filter(sp => sp.common_name === plant.common_name);
+    // const matchSpecies = species.filter(sp => sp.common_name === plant.common_name);
 
     // console.log(`OUR MATCHED SPECIES`, matchSpecies);
 
@@ -60,9 +60,9 @@ function Plant(props) {
         axiosWithAuth().put(`/plants/${id}`, plantToEdit)
             .then((res) => {
                 console.log(res);
-                // setPlants(res.data);
-                // history.push(`/plants`);
-                window.location.reload();
+                setPlants(res.data);
+                history.push(`/plants`);
+                // window.location.reload();
             })
             .catch((err) => {
                 console.log(err);
@@ -95,7 +95,7 @@ function Plant(props) {
                 {toggle === true && <div className="more-info">
                     <p>Common Species Name: {plant.common_name}</p>
                     <p>Scientific Name: {plant.scientific_name}</p>
-                    <p>H2O Frequency: {matchSpecies[0].h2o_frequency}</p>
+                    {/* <p>H2O Frequency: {matchSpecies[0].h2o_frequency}</p> */}
 
                     {/* {edit && <select name="species-id">
                         {species.map((x, idx) => {
@@ -128,11 +128,12 @@ function Plant(props) {
 
             <div className="plant-avatar">
                 {/* <img src={PlantAvatar} alt={plant.nickname} /> */}
-                {matchSpecies.image_url !== '' ? (
+                {/* {matchSpecies.image_url !== '' ? (
                     <img src={matchSpecies[0].image_url} alt={plant.nickname} />
                 ) : (
                         <img src={PlantAvatar} alt="plant.nickname" />
-                    )}
+                    )} */}
+                <img src={PlantAvatar} alt="Default plant avatar" />
             </div>
         </Card>
     )

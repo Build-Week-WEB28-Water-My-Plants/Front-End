@@ -27,7 +27,7 @@ function CreatePlant(props) {
         user_id: uid
     });
 
-    const [species, setSpecies] = useState(JSON.parse(localStorage.getItem('species')));
+    const species = useState(JSON.parse(localStorage.getItem('species')));
     // const [plants, setPlants] = useState(JSON.parse(localStorage.getItem('plants')));
 
     const handleChange = (e) => {
