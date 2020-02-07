@@ -33,6 +33,26 @@ function CreatePlant(props) {
             setErr('You must select a species.');
             return;
         }
+        else if (newPlant.nickname === '' || newPlant.location === '') {
+            setErr('Please fill out both fields.');
+            return;
+        }
+        else if (newPlant.nickname.match(/[^a-z0-9]/gi, '')) {
+            setErr(`Your plant's name can only contain letters and numbers.`);
+            return;
+        }
+        else if (newPlant.location.match(/[^a-z0-9]/gi, '')) {
+            setErr(`Your plant's location can only contain letters and numbers.`);
+            return;
+        }
+        else if (newPlant.nickname.length < 3 || newPlant.location.length < 3) {
+            setErr(`Your plant's nickname and location must both be at least 3 letters.`);
+            return;
+        }
+        else if (newPlant.nickname.length >= 32 || newPlant.location.length >= 32) {
+            setErr(`Your plant's nickname or location cannot be more than 32 letters.`);
+            return;
+        }
 
         axiosWithAuth().post(`/plants`, newPlant)
             .then((res) => {
@@ -57,7 +77,6 @@ function CreatePlant(props) {
                         <li>Give it a nickname</li>
                         <li>Tell us where it's located in your home</li>
                         <li>Identify its species</li>
-                        {/* <li>Set how many times it needs to be watered per day</li> */}
                     </ol>
                     <p className="note">Note: If there are no species, you'll need to <Link to="/create-species">create one</Link></p>
                 </div>
@@ -93,7 +112,7 @@ function CreatePlant(props) {
                 </select>
                 <button type="submit">Create Plant</button>
             </form>
-            {err && <p>{err}</p>}
+            {err && <p className="error">{err}</p>}
         </Container>
     )
 }
@@ -102,6 +121,16 @@ const Container = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        .error {
+            margin-top: 2rem;
+            width: 100%;
+            text-align: center;
+            color: red;
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 0.1rem;
+        }
 
         .note {
             a {

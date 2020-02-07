@@ -10,13 +10,12 @@ import { PlantsContext } from './contexts';
 import Login from './components/Login';
 import Register from './components/Register';
 import Plants from './components/Plants';
-// import Plant from './components/Plant';
 import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
 import CreateSpecies from './components/CreateSpecies';
-// import Home from './components/Home';
 import Header from './components/visual/Header';
 import UserCP from './components/UserCP';
+import Species from './components/Species';
 
 function App() {
 
@@ -44,6 +43,7 @@ function App() {
             <PrivateRoute exact path="/plants/:id" render={props => <Edit {...props} plants={plants} />} />
             <PrivateRoute path="/create" component={CreatePlant} />
             <PrivateRoute path="/create-species" component={CreateSpecies} />
+            <PrivateRoute path="/species" component={Species} />
           </Switch>
         </div>
       </PlantsContext.Provider>
@@ -70,6 +70,11 @@ const Container = styled.div`
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px 0 #000;
     margin-bottom: 5rem;
+
+    @media (max-width: 800px) {
+      width: 95%;
+      padding: 7%;
+    }
   }
 `;
 
