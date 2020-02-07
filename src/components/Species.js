@@ -1,60 +1,63 @@
 import React, { useState, useEffect } from 'react';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import styled from 'styled-components';
+
 // assets
 import Ficus from '../assets/SpeciesIcon/Ficus.svg';
 
 const Species = () => {
-   const [species, setSpecies] = useState([]);
+    const [species, setSpecies] = useState([]);
 
-   useEffect(() => {
-       axiosWithAuth()
-       .get(`/plants/species`)
-       .then(res => {
-           console.log(res);
-           setSpecies(res.data);
-       })
-    
-       .catch((err) => {
-           console.log(err);
-       })
-   }, []);
+    useEffect(() => {
+        axiosWithAuth()
+            .get(`/plants/species`)
+            .then(res => {
+                console.log(res);
+                setSpecies(res.data);
+            })
 
-//    const speciesIcon = [{
-//     photo:{Ficus},
-//     photo:{Orchid},
-//     photo:{PeaceLily}
-// }]
+            .catch((err) => {
+                console.log(err);
+            })
+    }, []);
 
-//    class SpeciesIcon extends React.Component {
-//     render() {
-//         return (
-//             <div>
-//              {speciesIcon.map (e => 
-//                 <p>
-//                 icon={e.photo}
-                
-//                 </p>
-//             )}
-//             </div>
-             
-            
-//         );
-//     }
-// }
+    //    const speciesIcon = [{
+    //     photo:{Ficus},
+    //     photo:{Orchid},
+    //     photo:{PeaceLily}
+    // }]
+
+    //    class SpeciesIcon extends React.Component {
+    //     render() {
+    //         return (
+    //             <div>
+    //              {speciesIcon.map (e => 
+    //                 <p>
+    //                 icon={e.photo}
+
+    //                 </p>
+    //             )}
+    //             </div>
+
+
+    //         );
+    //     }
+    // }
 
     return (
         <SpeciesContainer>
             <div classname='species-list' >
                 {species.map(speciesitem => {
                     return (
-                      <DivS key={speciesitem.id} className = "card">
-                          <h3>{speciesitem.common_name}</h3>
-                          <img src={Ficus} alt="plant icon" />
-                          <p>Scientific Name: {speciesitem.scientific_name}</p>
-                          <p> Water Frequency: {speciesitem.h2o_frequency}</p>
-                          
-                      </DivS>
+                        <DivS key={speciesitem.id} className="card">
+                            {speciesitem.image_url ? (<div className="species-img"><img src={speciesitem.image_url} alt="Species Icon" /></div>) : (<div className="species-img"><img src={Ficus} alt="Default Species Avatar" /></div>)}
+                            <h3>{speciesitem.common_name}</h3>
+                            {/* Moved above and changed to display your icon if there's no working species image */}
+                            {/* <img src={Ficus} alt="plant icon" /> */}
+                            <p>Scientific Name: {speciesitem.scientific_name}</p>
+                            <p> Water Frequency: {speciesitem.h2o_frequency}</p>
+
+                        </DivS>
 
                     )
                 })}
@@ -84,10 +87,26 @@ img {
     margin-right: auto;
     width: 20%;
 }
-
-        `
+`
 
 const DivS = styled.div`
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+
+.species-img {
+    width: 70%;
+    height: 30rem;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+        height: 30rem;
+        object-fit: contain;
+    }
+}
+`
       
 p {
         font-size: 1.6rem;

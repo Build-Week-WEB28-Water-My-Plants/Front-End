@@ -1,25 +1,15 @@
-import React, { useContext, useState, useEffect, useReducer } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory, Link } from 'react-router-dom';
 
-// contexts
-// import { PlantsContext } from '../contexts';
-
 // assets
-// import Start from '../assets/Start.svg';
 import Paint from '../assets/Paint.svg';
 
 function CreatePlant(props) {
 
     let history = useHistory();
-    // const { plants, setPlants, species, setSpecies } = useContext(PlantsContext);
     const uid = localStorage.getItem('id');
-
-    // console.log(uid);
-
-    // const { setPlants } = useContext(PlantsContext);
-
     const [newPlant, setNewPlant] = useState({
         nickname: '',
         species_id: Number(null),
@@ -27,8 +17,8 @@ function CreatePlant(props) {
         user_id: uid
     });
 
+    const [err, setErr] = useState('');
     const species = JSON.parse(localStorage.getItem('species'));
-    // const [plants, setPlants] = useState(JSON.parse(localStorage.getItem('plants')));
 
     const handleChange = (e) => {
         setNewPlant({
@@ -38,8 +28,32 @@ function CreatePlant(props) {
     }
 
     const createPlant = (newPlant) => {
-        // start our creation of a plant
-        // dispatch({ type: 'CREATE_REQUEST' });
+
+        if (newPlant.species_id === 0) {
+            setErr('You must select a species.');
+            return;
+        }
+        else if (newPlant.nickname === '' || newPlant.location === '') {
+            setErr('Please fill out both fields.');
+            return;
+        }
+        else if (newPlant.nickname.match(/[^a-z0-9 ]/gi, '')) {
+            setErr(`Your plant's name can only contain letters and numbers.`);
+            return;
+        }
+        else if (newPlant.location.match(/[^a-z0-9 ]/gi, '')) {
+            setErr(`Your plant's location can only contain letters and numbers.`);
+            return;
+        }
+        else if (newPlant.nickname.length < 3 || newPlant.location.length < 3) {
+            setErr(`Your plant's nickname and location must both be at least 3 letters.`);
+            return;
+        }
+        else if (newPlant.nickname.length >= 32 || newPlant.location.length >= 32) {
+            setErr(`Your plant's nickname or location cannot be more than 32 letters.`);
+            return;
+        }
+
         axiosWithAuth().post(`/plants`, newPlant)
             .then((res) => {
                 console.log(res);
@@ -63,7 +77,6 @@ function CreatePlant(props) {
                         <li>Give it a nickname</li>
                         <li>Tell us where it's located in your home</li>
                         <li>Identify its species</li>
-                        {/* <li>Set how many times it needs to be watered per day</li> */}
                     </ol>
                     <p className="note">Note: If there are no species, you'll need to <Link to="/create-species">create one</Link></p>
                 </div>
@@ -71,8 +84,6 @@ function CreatePlant(props) {
             <form onSubmit={(e) => {
                 e.preventDefault();
                 createPlant(newPlant);
-                // dispatch(createPlant(newPlant));
-                // console.log(newPlant);
             }}>
                 <input
                     type="text"
@@ -91,15 +102,17 @@ function CreatePlant(props) {
                     autoComplete="off"
                 />
                 <select name="species_id" onChange={handleChange}>
+                    <option selected disabled>Select a Species</option>
                     {
                         species.map((x, idx) => {
                             // { console.log(x.id) }
-                            return <option key={idx} value={Number(x.id)}>{x.common_name}</option>
+                            return <option key={idx} value={x.id}>{x.common_name}</option>
                         })
                     }
                 </select>
                 <button type="submit">Create Plant</button>
             </form>
+            {err && <p className="error">{err}</p>}
         </Container>
     )
 }
@@ -108,6 +121,16 @@ const Container = styled.div`
         display: flex;
         flex-direction: column;
         align-items: center;
+
+        .error {
+            margin-top: 2rem;
+            width: 100%;
+            text-align: center;
+            color: red;
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 0.1rem;
+        }
 
         .note {
             a {

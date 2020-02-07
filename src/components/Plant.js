@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { useHistory } from 'react-router-dom';
@@ -6,7 +6,6 @@ import { PlantsContext } from '../contexts';
 
 // assets
 import PlantAvatar from '../assets/PlantAvatar.svg';
-import Water from '../assets/Water.svg';
 import Drop from '../assets/Drop.svg';
 import Drops from '../assets/Drops.svg';
 import Dropss from '../assets/Dropss.svg';
@@ -18,23 +17,61 @@ function Plant(props) {
     const { setPlants } = useContext(PlantsContext);
     const { plant } = props;
     const uid = Number(localStorage.getItem('id'));
-    const species = JSON.parse(localStorage.getItem('species'));
-    const filteredSpecies = species.map((x => x));
-    const filtered = filteredSpecies.filter(sp => sp.common_name === plant.common_name);
+    console.log(plant);
+    const [filtered, setFiltered] = useState([]);
+    const [img, setImg] = useState('');
+    const [h2o, setH2o] = useState(0);
+    // const [filtered, setFiltered] = useState([]);
+    // const species = JSON.parse(localStorage.getItem('species'));
+    // const filteredSpecies = species.map((x => x));
+    // const filtered = filteredSpecies.filter(sp => sp.common_name === plant.common_name);
+    // const filtered = species.filter(sp => sp.id === plant.species_id);
 
-    console.log(`our new filtered species`, filteredSpecies);
-    console.log(`please let this work`, filtered);
+    // const sp = fil.filter(s => s.common_name === plant.common_name);
+    // const filter = sp.filter(s => s.common_name === plant.common_name);
+
+    // console.log(`our new filtered species`, filteredSpecies);
+    // console.log(`please let this work`, filtered);
+
+    useEffect(() => {
+        axiosWithAuth().get(`/plants/species`)
+            .then((res) => {
+                console.log(res);
+                const match = res.data.filter(sp => sp.common_name === plant.common_name);
+                const spid = match[0].id;
+                setFiltered(spid);
+
+                axiosWithAuth().get(`/plants/species/list/${spid}`)
+                    .then((res) => {
+                        console.log(`SPECIES BY ID: `, res);
+                        const spImg = res.data[0].image_url;
+                        const h2o = res.data[0].h2o_frequency;
+
+                        setImg(spImg);
+                        setH2o(h2o);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, [])
 
     const [edit, setEdit] = useState(false);
+    const [err, setErr] = useState('');
     const [plantToEdit, setPlantToEdit] = useState({
-        nickname: '',
-        location: '',
+        nickname: plant.nickname,
+        location: plant.location,
         user_id: uid
     });
 
-    // const matchSpecies = species.filter(sp => sp.common_name === plant.common_name);
-
-    // console.log(`OUR MATCHED SPECIES`, matchSpecies);
+    // const [speciesToEdit, setSpeciesToEdit] = useState({
+    //     common_name: '',
+    //     scientific_name: '',
+    //     h2o_frequency: ''
+    // });
 
     const handleChange = (e) => {
         setPlantToEdit({
@@ -42,6 +79,13 @@ function Plant(props) {
             [e.target.name]: e.target.value
         });
     }
+
+    // const speciesChange = (e) => {
+    //     setSpeciesToEdit({
+    //         ...speciesToEdit,
+    //         [e.target.name]: e.target.value
+    //     });
+    // }
 
     const [toggle, setToggle] = useState(false);
 
@@ -70,22 +114,52 @@ function Plant(props) {
                 console.log(res);
                 setPlants(res.data);
                 history.push(`/plants`);
-                // window.location.reload();
             })
             .catch((err) => {
                 console.log(err);
             })
     }
 
+    // will take another route to edit species
+    // const editSpecies = (id) => {
+
+    //     if (speciesToEdit.common_name === '' ||
+    //         speciesToEdit.scientific_name === '' ||
+    //         speciesToEdit.h2o_frequency === '') {
+    //         setErr('Please make sure to enter in a common name, scientific name, and H2O frequency.')
+    //         return;
+    //     }
+
+    //     axiosWithAuth().put(`/plants/species/${id}`, speciesToEdit)
+    //         .then((res) => {
+    //             // console.log(res);
+    //             axiosWithAuth().get(`/plants/user/${uid}`)
+    //                 .then((res) => {
+    //                     console.log(res);
+    //                     setPlants(res.data);
+    //                     history.push(`/plants`);
+    //                 })
+    //                 .catch((err) => {
+    //                     console.log(err);
+    //                 })
+    //         })
+    //         .catch((err) => {
+    //             console.log(err);
+    //         })
+    // }
+
     return (
         <Card key={props.idx}>
             {/* {console.log(species)} */}
+            {console.log(plant)}
+            {console.log(`FILTERED`, filtered)}
+            {/* {console.log(sp)} */}
+            {/* {console.log(filtered)} */}
             <div className="plant-info">
                 {/* {console.log(plant)} */}
                 <p>Nickname: {!edit ? (<span>{plant.nickname}</span>) : <input
                     type="text"
                     name="nickname"
-                    placeholder="New Nickname"
                     value={plantToEdit.nickname}
                     onChange={handleChange}
                     autoComplete="off"
@@ -93,7 +167,6 @@ function Plant(props) {
                 <p>Location: {!edit ? (<span>{plant.location}</span>) : <input
                     type="text"
                     name="location"
-                    placeholder="New Location"
                     value={plantToEdit.location}
                     onChange={handleChange}
                     autoComplete="off"
@@ -103,34 +176,53 @@ function Plant(props) {
                 {/* {console.log(`THIS IS OUR PLANT`, plant)} */}
                 {toggle === true && <div className="more-info">
                     <p>Common Species Name: {plant.common_name}</p>
+                    {/* <p>Common Species Name: {!edit ? (<span>{plant.common_name}</span>) : (
+                        <input
+                            type="text"
+                            name="common_name"
+                            value={speciesToEdit.common_name}
+                            onChange={speciesChange}
+                            autoComplete="off"
+                        />
+                    )}</p> */}
                     <p>Scientific Name: {plant.scientific_name}</p>
+                    {/* <p>Scientific Name: {!edit ? (<span>{plant.scientific_name}</span>) : (
+                        <input
+                            type="text"
+                            name="scientific_name"
+                            value={speciesToEdit.scientific_name}
+                            onChange={speciesChange}
+                            autoComplete="off"
+                        />
+                    )}</p> */}
                     {/* <p>H2O Frequency: {filtered[0].h2o_frequency}</p> */}
-                    <div className="droplets">
+                    {!edit && <div className="droplets">
                         <div>
-                            <h4>Water / day</h4>
-                            {filtered[0].h2o_frequency === 1 &&
+                            <h4>H2O / day</h4>
+                            {h2o === 1 &&
                                 <img src={Drop} alt="Droplet" />}
+                            {h2o === 2 &&
+                                <img src={Drops} alt="Droplet x2" />}
+                            {h2o === 3 &&
+                                <img src={Dropss} alt="Droplet x3" />}
                         </div>
-                    </div>
-
-                    {/* {edit && <select name="species-id">
-                        {species.map((x, idx) => {
-                            return <option key={idx} value={x.id}>{x.common_name}</option>
-                        })}
-                    </select>} */}
-                    {edit && <button onClick={(e) => {
+                    </div>}
+                    {/* {edit && <p><span>H2O Frequency:</span> <input
+                        type="number"
+                        name="h2o_frequency"
+                        min="1"
+                        max="3"
+                        value={speciesToEdit.h2o_frequency}
+                        onChange={speciesChange}
+                        autoComplete="off"
+                    /></p>} */}
+                    {edit && <button className="confirm-edit" onClick={(e) => {
                         e.preventDefault();
                         editPlant(plant.id);
+                        // editSpecies(filtered);
                         setEdit(!edit);
                     }}>Finish Editing</button>}
                     <div className="plant-controls">
-
-                        {/* removing until we need to use */}
-                        {/* <div className="water-btn">
-                            <img src={Water} alt="Water Your Plant" />
-                            <span>Water</span>
-                        </div> */}
-
                         <button onClick={() => setEdit(!edit)}>Edit Plant</button>
                         <button className="delete" onClick={(e) => {
                             e.preventDefault();
@@ -143,13 +235,7 @@ function Plant(props) {
             </div>
 
             <div className="plant-avatar">
-                {/* <img src={PlantAvatar} alt={plant.nickname} /> */}
-                {/* {matchSpecies.image_url !== '' ? (
-                    <img src={matchSpecies[0].image_url} alt={plant.nickname} />
-                ) : (
-                        <img src={PlantAvatar} alt="plant.nickname" />
-                    )} */}
-                <img src={PlantAvatar} alt="Default plant avatar" />
+                {img ? <img src={img} alt="Species" /> : <img src={PlantAvatar} alt="Species" />}
             </div>
         </Card>
     )
@@ -366,6 +452,10 @@ const Card = styled.div`
                 font-size: 5rem;
                 font-weight: 900;
                 color: #fafafa;
+
+                @media (max-width: 800px) {
+                    font-size: 3rem;
+                }
             }
 
             p {
@@ -379,6 +469,25 @@ const Card = styled.div`
                 height: 5rem;
             }
         }
+    }
+
+    button.confirm-edit {
+            background: #d1e3ff;
+            border: none;
+            border-radius: 0.3rem;
+            width: 12rem;
+            height: 3rem;
+            font-size: 1.4rem;
+            font-weight: 300;
+            letter-spacing: 0.1rem;
+            transition: all 300ms;
+            box-shadow: 0px 2px 5px -5px;
+            margin-top: 2rem;
+
+            &:hover {
+                transition: opacity 300ms;
+                opacity: 0.9;
+                cursor: pointer;
     }
 `;
 

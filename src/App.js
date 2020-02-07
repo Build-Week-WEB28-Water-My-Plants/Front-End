@@ -10,23 +10,18 @@ import { PlantsContext } from './contexts';
 import Login from './components/Login';
 import Register from './components/Register';
 import Plants from './components/Plants';
-// import Plant from './components/Plant';
 import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
 import CreateSpecies from './components/CreateSpecies';
 import Species from './components/Species';
-// import Home from './components/Home';
 import Header from './components/visual/Header';
 import UserCP from './components/UserCP';
+import Species from './components/Species';
 
 function App() {
 
-  // const uid = localStorage.getItem('id');
-
   const [plants, setPlants] = useState([]);
   const [species, setSpecies] = useState([]);
-
-  const [isLogged, setIsLogged] = useState(!!localStorage.getItem('token'));
 
   return (
     <Container>
@@ -76,6 +71,11 @@ const Container = styled.div`
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px 0 #000;
     margin-bottom: 5rem;
+
+    @media (max-width: 800px) {
+      width: 95%;
+      padding: 7%;
+    }
   }
 `;
 
