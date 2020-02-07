@@ -37,11 +37,11 @@ function CreatePlant(props) {
             setErr('Please fill out both fields.');
             return;
         }
-        else if (newPlant.nickname.match(/[^a-z0-9]/gi, '')) {
+        else if (newPlant.nickname.match(/[^a-z0-9 ]/gi, '')) {
             setErr(`Your plant's name can only contain letters and numbers.`);
             return;
         }
-        else if (newPlant.location.match(/[^a-z0-9]/gi, '')) {
+        else if (newPlant.location.match(/[^a-z0-9 ]/gi, '')) {
             setErr(`Your plant's location can only contain letters and numbers.`);
             return;
         }
