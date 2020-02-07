@@ -120,6 +120,10 @@ function Plants(props) {
                 }}>Create Plant</button>
                 <button onClick={(e) => {
                     e.preventDefault();
+                    history.push(`/species`);
+                }}>View Species</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
                     history.push(`/usercp`);
                 }}>Account Settings</button>
             </UserControlPanel>
@@ -140,7 +144,6 @@ function Plants(props) {
                     )
                 })
             }
-            {/* <PrivateRoute exact path="/plants/:id" render={props => <Edit {...props} plants={plants} />} /> */}
         </Container>
     )
 }
@@ -279,22 +282,14 @@ const Container = styled.div`
 
 const UserControlPanel = styled.div`
 margin: 0 auto;
-width: 70%;
+width: 100%;
 display: flex;
 height: 7rem;
 align-items: center;
 justify-content: space-evenly;
 
-@media (max-width: 1208px) {
-    width: 80%;
-}
-
-@media (max-width: 850px) {
-    width: 80%;
-}
-
-@media (max-width: 1050px) {
-    width: 90%;
+@media (max-width: 1130px) {
+    flex-wrap: wrap;
 }
 
 @media (max-width: 930px) {

@@ -185,11 +185,21 @@ const Container = styled.div`
         display: flex;
         justify-content: space-evenly;
 
+        @media (max-width: 670px) {
+            flex-direction: column;
+            align-items: center;
+        }
+
         div {
             width: 30%;
             display: flex;
             flex-direction: column;
             align-items: center;
+
+            @media (max-width: 670px) {
+                margin: 2rem 0;
+                width: 100%;
+            }
 
             h4 {
                 text-align: center;
@@ -227,6 +237,10 @@ const Container = styled.div`
             font-size: 1.2rem;
             font-weight: 300;
             letter-spacing: 0.1rem;
+
+            @media (max-width: 370px) {
+                width: 95%;
+            }
 
             &:focus {
                 outline: none;
