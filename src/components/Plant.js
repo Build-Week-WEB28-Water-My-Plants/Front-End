@@ -120,6 +120,7 @@ function Plant(props) {
             })
     }
 
+    // will take another route to edit species
     // const editSpecies = (id) => {
 
     //     if (speciesToEdit.common_name === '' ||
