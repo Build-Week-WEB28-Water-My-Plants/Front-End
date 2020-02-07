@@ -87,7 +87,7 @@ img {
     margin-right: auto;
     width: 20%;
 }
-        `
+`
 
 const DivS = styled.div`
 width: 100%;
@@ -106,6 +106,7 @@ align-items: center;
         object-fit: contain;
     }
 }
+`
       
 p {
         font-size: 1.6rem;

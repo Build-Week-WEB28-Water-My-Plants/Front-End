@@ -126,6 +126,10 @@ function Plants(props) {
                     e.preventDefault();
                     history.push(`/usercp`);
                 }}>Account Settings</button>
+                <button onClick={(e) => {
+                    e.preventDefault();
+                    history.push(`/species`);
+                }}>View All Species</button>
             </UserControlPanel>
             {console.log(`was this success?`, plants, species)}
             <h3>Welcome to your Plant Dashboard, <span className="username">{localStorage.getItem('username')}</span>.</h3>
@@ -301,7 +305,7 @@ button {
     background: #d1ffd6;
     border: none;
     border-radius: 0.3rem;
-    width: 20rem;
+    width: 15rem;
     height: 3rem;
     font-size: 1.4rem;
     font-weight: 300;

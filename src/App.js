@@ -13,6 +13,7 @@ import Plants from './components/Plants';
 import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
 import CreateSpecies from './components/CreateSpecies';
+import Species from './components/Species';
 import Header from './components/visual/Header';
 import UserCP from './components/UserCP';
 import Species from './components/Species';
