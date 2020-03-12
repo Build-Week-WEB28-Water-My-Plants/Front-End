@@ -32,7 +32,7 @@ function Home(props) {
 
                 <div className="col">
                     <h3>Never Forget To Water</h3>
-                    <p>Water My Plants makes it easy to designate the amount of times you water specific plants per day, so that you can better more effectively
+                    <p>PlantWise makes it easy to designate the amount of times you water specific plants per day, so that you can better more effectively
                     manage your time and ensure that your plants get watered when they need to.
                     </p>
                 </div>
@@ -44,7 +44,7 @@ function Home(props) {
 
                 <div className="col">
                     <h3>Learn About Plants</h3>
-                    <p>Water My Plants is a Lambda School build week project that was developed by a team of Full Stack Web Development students in just four days.</p>
+                    <p>PlantWise is a Lambda School build week project that was developed by a team of Full Stack Web Development students in just four days.</p>
                 </div>
 
             </div>
