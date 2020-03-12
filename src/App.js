@@ -15,7 +15,7 @@ import Edit from './components/Edit';
 import CreatePlant from './components/CreatePlant';
 import CreateSpecies from './components/CreateSpecies';
 import Species from './components/Species';
-// import Home from './components/Home';
+import Home from './components/Home';
 import Header from './components/visual/Header';
 import UserCP from './components/UserCP';
 
@@ -40,7 +40,7 @@ function App() {
             {localStorage.getItem('token') && <Route path="/register" render={() => <Redirect to="/plants" />} />}
 
             <Route path="/login" component={Login} />
-            <Route exact path="/" component={Register} />
+            <Route exact path="/" component={Home} />
             <Route path="/register" component={Register} />
 
             {/* Private Routes for authenticated users */}

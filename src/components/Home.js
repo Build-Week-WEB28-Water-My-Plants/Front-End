@@ -32,17 +32,19 @@ function Home(props) {
 
                 <div className="col">
                     <h3>Never Forget To Water</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat libero vitae imperdiet mattis. Integer sagittis viverra magna non varius. In tincidunt lorem consectetur justo iaculis blandit at ut erat. Vivamus diam tellus, tincidunt eu maximus et, placerat at ligula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec tempor faucibus ligula, nec aliquam tortor malesuada ut. Aenean egestas ipsum eu tortor tristique vulputate. Aenean dictum massa leo, sed lacinia lacus tincidunt finibus. Nullam cursus in mauris vel tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+                    <p>Water My Plants makes it easy to designate the amount of times you water specific plants per day, so that you can better more effectively
+                    manage your time and ensure that your plants get watered when they need to.
+                    </p>
                 </div>
 
                 <div className="col">
                     <h3>Keep Your Plants Healthy</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat libero vitae imperdiet mattis. Integer sagittis viverra magna non varius. In tincidunt lorem consectetur justo iaculis blandit at ut erat. Vivamus diam tellus, tincidunt eu maximus et, placerat at ligula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec tempor faucibus ligula, nec aliquam tortor malesuada ut. Aenean egestas ipsum eu tortor tristique vulputate. Aenean dictum massa leo, sed lacinia lacus tincidunt finibus. Nullam cursus in mauris vel tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+                    <p>It's as easy as a couple clicks to create your plants and designate their water frequencies to ensure that you keep your plants healthy.</p>
                 </div>
 
                 <div className="col">
                     <h3>Learn About Plants</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam placerat libero vitae imperdiet mattis. Integer sagittis viverra magna non varius. In tincidunt lorem consectetur justo iaculis blandit at ut erat. Vivamus diam tellus, tincidunt eu maximus et, placerat at ligula. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec tempor faucibus ligula, nec aliquam tortor malesuada ut. Aenean egestas ipsum eu tortor tristique vulputate. Aenean dictum massa leo, sed lacinia lacus tincidunt finibus. Nullam cursus in mauris vel tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus.</p>
+                    <p>Water My Plants is a Lambda School build week project that was developed by a team of Full Stack Web Development students in just four days.</p>
                 </div>
 
             </div>
